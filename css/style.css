@@ -38,7 +38,7 @@ h1{
 	text-align: center;
 }
 
-.menu{
+div.menu{
 	background-color: #233140;
 	position: absolute;
 	width: 100%;
@@ -49,12 +49,20 @@ h1{
 	margin:0;
 	padding:0;
 	position: relative;
-	list-style: none outside none;
-	}
+	list-style: none outside;
+}
 .topmenualign > li{
 	float :left;
 	margin: 8px;
 }
+
+div.info {
+	position: absolute;
+	margin-top: 39px;
+	width: 100%;
+	height: 100%;
+}
+
 a{
 	text-decoration: none;
 	color:#7f8c8d;
