@@ -5,7 +5,7 @@
 ?>
 	<div class="container">
 		<!-- HEADER -->
-		<div class="header">
+		<div id="header">
 			<!-- Login dialog box -->
 			<div id="loginModal" class="modalDialog">
 				<div>
@@ -32,7 +32,7 @@
 		</div>
 
 		<!-- CONTENT -->
-		<div class="contentmain">
+		<div id="contentmain">
 			<div class="content">
 				<div class="menu">
 					<ul class="topmenu">
@@ -45,20 +45,17 @@
 						<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>
 					</ul>
 				</div>
-			<div>
-				<p>
-					Ici contenu du blog
-					<!-- <img src="img/example-image.jpg" class="img-rounded img-centered" alt="Photo test"/> -->
-				</p>
-			</div>
-			</div>
-			<div class="sidebar">
-
+				<div class="info">
+					<p>
+						Ici contenu du blog
+						<!-- <img src="img/example-image.jpg" class="img-rounded img-centered" alt="Photo test"/> -->
+					</p>
+				</div>
 			</div>
 		</div>
 
 		<!-- FOOTER -->
-		<div class="footer">
+		<div id="footer">
 			<p>
 				A website by Vincent Monot and Lucas Nicosia
 			</p>
