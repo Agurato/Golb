@@ -108,11 +108,12 @@ div.login{
 }
 
 input{
-	color: white;	
+	color: white;
 	background-color: #2c3e50;
 	width: 100px;
 	text-align: center;
 }
+
 input.send{
 	height:70px;
 	width:100px;
@@ -121,6 +122,7 @@ input.send{
 	display: block;
 	margin-right: 5px;
 }
+
 label{
 	color: #c0392b;
 	text-align: left;
@@ -128,6 +130,7 @@ label{
 	width: 100px;
 	float:left;
 }
+
 form{
 	text-align: left;
 	margin-left: 5px;
@@ -156,8 +159,9 @@ form{
 	margin: 10% auto;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
-	background: #fff;
-	/*background: -moz-linear-gradient(#fff, #999);*/
-	/*background: -webkit-linear-gradient(#fff, #999);*/
-	/*background: -o-linear-gradient(#fff, #999);*/
+	background: #58ACFA;
+}
+
+.close {
+	color: #2c3e50;
 }

@@ -5,8 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>'.$title.'</title>
-		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"></meta>
-		<link href="'.$css.'" type="text/css" rel="stylesheet"></link>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link href="'.$css.'" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 ';
