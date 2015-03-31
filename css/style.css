@@ -75,6 +75,9 @@ li.leftAlign {
 	float: left;
 	margin: 8px;
 }
+div.menu a:hover{
+	background-color: #11181f;
+}
 
 li.rightAlign {
 	float: right;
@@ -156,7 +159,8 @@ form{
 	margin: 10% auto;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
-	background: #fff;
+	background: #233140;
+	border:solid;
 	/*background: -moz-linear-gradient(#fff, #999);*/
 	/*background: -webkit-linear-gradient(#fff, #999);*/
 	/*background: -o-linear-gradient(#fff, #999);*/
