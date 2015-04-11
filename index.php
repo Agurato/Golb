@@ -2,27 +2,15 @@
 	include('begin.php');
 	include('util.inc.php');
 	beginHTML('Golb','css/style.css');
+	beginSession();
 ?>
 	<div class="container">
 		<!-- HEADER -->
 		<div id="header">
 			<!-- Login dialog box -->
-			<div id="loginModal" class="modalDialog">
-				<div>
-					<form method="post" action="index.php">
-						<p>
-							<label for="login">Login</label>
-							<input type="text" name="login"/>
-							<input type="submit" class="send" value="Login" />
-						</p>
-						<p>
-							<label for="password">Password</label>
-							<input type="password" name="password" id"=password"/>
-						</p>
-					</form>
-					<a href="#close" title="Close" class="close">Close</a>
-				</div>
-			</div>
+			<?php
+			loginForm();
+			?>
 
 			<!-- Title & subtitle -->
 			<div class="titles">
@@ -39,17 +27,35 @@
 						<li class="leftAlign"><a href="index.php">Accueil</a></li>
 						<li class="leftAlign"><a href="index.php">News</a></li>
 						<li class="leftAlign"><a href="index.php">Messages</a></li>
-						<li class="leftAlign"><a href="index.php">Profil</a></li>
-						<li class="rightAlign"><a href="index.php">Administration</a></li>
-						<li class="rightAlign"><a href="index.php">S'inscrire</a></li>
-						<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>
+						<?php
+						if(!empty($_SESSION['login'])){
+							echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';	
+							//echo '<li class="rightAlign"><a href="index.php">Administration</a></li>';
+							echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
+							echo '<li class="rightAlign login">'.$_SESSION['login'].'</li>';
+
+						}
+						else{
+							echo '<li class="rightAlign"><a href="index.php">S\'inscrire</a></li>';
+							echo '<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>';
+						}
+						?>
 					</ul>
 				</div>
 				<div class="info">
-					<p>
-						Ici contenu du blog
-						<!-- <img src="img/example-image.jpg" class="img-rounded img-centered" alt="Photo test"/> -->
-					</p>
+					<form method="post" action="index.php" class="selecter">
+							<div class="selecter">
+								<select name="Selectioner une rubirque" id="rubrique">
+									<option value="Rubrique">Rubrique</option>
+									<option value="XHTML">XHTML</option>
+									<option value="CSS">CSS</option>
+									<option value="PHP">PHP</option>
+								</select>
+							</div>
+							<div>
+								<input type="submit" name="valider" value="Valider" id="valider"/>
+							</div>
+					</form>
 				</div>
 			</div>
 		</div>

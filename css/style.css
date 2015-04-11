@@ -165,3 +165,32 @@ form{
 	/*background: -webkit-linear-gradient(#fff, #999);*/
 	/*background: -o-linear-gradient(#fff, #999);*/
 }
+li.login{
+	color:#c0392b;
+	font-weight:bold;
+}
+
+input#valider{
+	border:none;
+	background-color: #233140;
+}
+input#valider:hover{
+	background-color: #11181f;
+}
+select{
+	width:100px;
+	background: transparent;
+	border:none;
+	color:#7f8c8d;
+}
+.selecter{
+	width:80px;
+	overflow:hidden;
+}
+form.selecter{
+	border:solid #11181f;
+}
+input#valider{
+	text-align: left;
+	color:#7f8c8d
+}

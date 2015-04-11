@@ -16,4 +16,28 @@
 		echo '	</body>
 </html>';
 	}
+
+	function beginSession(){
+		if(empty($_GET['deconnect'])){
+			$_GET['deconnect']='false';
+		}
+		if($_GET['deconnect'] != 'true'){
+			session_start();
+		}
+		else{
+			session_start();
+			session_destroy();
+			unset($_SESSION['login']);
+		}
+		if(!empty($_SESSION["login"])){
+		}
+		else{
+			if(!empty($_POST)){
+				if(!empty($_POST['login'])&&(!empty($_POST['password']))){
+					$_SESSION['login']=$_POST['login'];
+					
+				}	
+			}
+		}
+	}
 ?>

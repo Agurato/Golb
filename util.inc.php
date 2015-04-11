@@ -7,7 +7,7 @@
 		<!-- Login dialog box -->
 			<div id="loginModal" class="modalDialog">
 				<div>
-					<form method="get" action="index.php">
+					<form method="post" action="index.php">
 						<p>
 							<label for="login" >Login</label>
 							<input type="text" name="login" />
@@ -23,6 +23,8 @@
 			</div>
 		<?php
 	}
+
+
 
 	// endHTML()
 ?>
