@@ -4,23 +4,7 @@
 	beginHTML('Golb','css/style.css');
 	beginSession();
 ?>
-	<div class="container">
-		<!-- HEADER -->
-		<div id="header">
-			<!-- Login dialog box -->
-			<?php
-			loginForm();
-			?>
-
-			<!-- Title & subtitle -->
-			<div class="titles">
-				<h1>Golb</h1>
-				<p class="note">Petit Golb amusant pour les golbers affutés</p>
-			</div>			
-		</div>
-
-		<!-- CONTENT -->
-		<div id="contentmain">
+	<div id="contentmain">
 			<div class="content">
 				<div class="menu">
 					<ul class="topmenu">
@@ -31,8 +15,7 @@
 						if(!empty($_SESSION['login'])){
 							// echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';	
 							//echo '<li class="rightAlign"><a href="index.php">Administration</a></li>';
-							// echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
-							echo '<li class="rightAlign"><a href="deconnect.php?page=index.php">Se déconnecter</a></li>';
+							echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
 							echo '<li class="rightAlign login"><a href="index.php">'.$_SESSION['login'].'</a></li>';
 
 						}
@@ -42,21 +25,6 @@
 						}
 						?>
 					</ul>
-				</div>
-				<div class="info">
-					<form method="post" action="index.php" class="selecter">
-							<div class="selecter">
-								<select name="Selectioner une rubirque" id="rubrique">
-									<option value="Rubrique">Rubrique</option>
-									<option value="XHTML">XHTML</option>
-									<option value="CSS">CSS</option>
-									<option value="PHP">PHP</option>
-								</select>
-							</div>
-							<div>
-								<input type="submit" name="valider" value="Valider" id="valider"/>
-							</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -68,6 +36,11 @@
 			</p>
 		</div>
 	</div>
+
 <?php
+	session_start();
+	session_destroy();
+	unset($_SESSION['login']);
+	echo '<meta http-equiv="refresh" content="0;URL='.$_GET["page"].'" /> ';
 	endHTML();
 ?>

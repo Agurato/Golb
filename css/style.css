@@ -165,7 +165,7 @@ form{
 	/*background: -webkit-linear-gradient(#fff, #999);*/
 	/*background: -o-linear-gradient(#fff, #999);*/
 }
-li.login{
+li.login > a {
 	color:#c0392b;
 	font-weight:bold;
 }
