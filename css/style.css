@@ -19,10 +19,10 @@ h1 {
 	text-align: center;
 }
 
+/* Sous-titre */
 p.note {
 	font-size: 12px;
 	color: #7f8c8d;
-
 }
 
 div.titles {
@@ -30,6 +30,7 @@ div.titles {
 	top:50%;
 }
 
+/* Contains the title and the modal windows */
 #header{
 	text-align: center;
 	position: relative;
@@ -71,17 +72,21 @@ div.titles {
 	list-style: none;
 }
 
+/* Aligns manu items on the left */
 li.leftAlign {
 	float: left;
 	margin: 8px;
 }
-div.menu a:hover{
-	background-color: #11181f;
-}
 
+/* Aligns manu items on the right */
 li.rightAlign {
 	float: right;
 	margin: 8px;
+}
+
+/* Background when menu items are hovered */
+div.menu a:hover {
+	background-color: #11181f;
 }
 
 div.info {
@@ -98,6 +103,7 @@ a {
 
 }
 
+/* I DON'T KNOW WHAT THIS IS
 div.login{
 	border-radius: 6px;
 	background-color: #233140;
@@ -109,33 +115,72 @@ div.login{
 	border:solid;
 	border-color:#2c3e50;
 }
+*/
 
-input{
+/* Used in the login form to align the "Login" button */
+div.leftForm {
+	position: relative;
+}
+
+/* Labels of the login form */
+p.loginForm > label {
+	color: #c0392b;
+	text-align: left;
+	display: block;
+	width: 100px;
+	float: left;
+}
+
+/* Inputs of the login form */
+p.loginForm > input {
 	color: white;	
 	background-color: #2c3e50;
 	width: 100px;
 	text-align: center;
 }
-input.send{
-	height:70px;
+
+/* "Login" button of the login form */
+p.loginForm > input.send {
+	height:68px;
 	width:100px;
 	border-radius: 6px;
-	float:right;
+	float: right;
 	display: block;
 	margin-right: 5px;
+	bottom: 0;
+	right: 0;
+	position: absolute;
 }
-label{
+
+/* Labels of the register form */
+p.registerForm > label {
 	color: #c0392b;
 	text-align: left;
-	display:block;
-	width: 100px;
-	float:left;
 }
-form{
+
+/* Inputs of the register form */
+p.registerForm > input {
+	color: white;	
+	background-color: #2c3e50;
+	width: 334px;
+	text-align: left;
+}
+
+/* "Register" button of the register form */
+p.registerForm > input.send {
+	width: 340px;
+	height: 50px;
+	margin-top: 10px;
+	text-align: center;
+	border-radius: 6px;
+}
+
+form {
 	text-align: left;
 	margin-left: 5px;
 }
 
+/* Modal dialog window (login & register) */
 .modalDialog {
 	position: fixed;
 	top: 0;
@@ -156,15 +201,14 @@ form{
 .modalDialog > div {
 	width: 350px;
 	position: relative;
-	margin: 10% auto;
+	margin: auto;
+	margin-top: 6%;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
 	background: #233140;
 	border:solid;
-	/*background: -moz-linear-gradient(#fff, #999);*/
-	/*background: -webkit-linear-gradient(#fff, #999);*/
-	/*background: -o-linear-gradient(#fff, #999);*/
 }
+
 li.login > a {
 	color:#c0392b;
 	font-weight:bold;
@@ -174,22 +218,27 @@ input#valider{
 	border:none;
 	background-color: #233140;
 }
+
 input#valider:hover{
 	background-color: #11181f;
 }
+
 select{
 	width:100px;
 	background: transparent;
 	border:none;
 	color:#7f8c8d;
 }
+
 .selecter{
 	width:80px;
 	overflow:hidden;
 }
+
 form.selecter{
 	border:solid #11181f;
 }
+
 input#valider{
 	text-align: left;
 	color:#7f8c8d

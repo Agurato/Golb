@@ -9,7 +9,8 @@
 		<div id="header">
 			<!-- Login dialog box -->
 			<?php
-			loginForm();
+				loginForm();
+				registerForm();
 			?>
 
 			<!-- Title & subtitle -->
@@ -30,14 +31,14 @@
 						<?php
 						if(!empty($_SESSION['login'])){
 							// echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';	
-							//echo '<li class="rightAlign"><a href="index.php">Administration</a></li>';
+							// echo '<li class="rightAlign"><a href="index.php">Administration</a></li>';
 							// echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
-							echo '<li class="rightAlign"><a href="deconnect.php?page=index.php">Se déconnecter</a></li>';
+							echo '<li class="rightAlign"><a href="disconnect.php?page=index.php">Se déconnecter</a></li>';
 							echo '<li class="rightAlign login"><a href="index.php">'.$_SESSION['login'].'</a></li>';
 
 						}
 						else{
-							echo '<li class="rightAlign"><a href="index.php">S\'inscrire</a></li>';
+							echo '<li class="rightAlign"><a href="index.php#registerModal">S\'inscrire</a></li>';
 							echo '<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>';
 						}
 						?>
