@@ -100,7 +100,11 @@ div.info {
 a {
 	text-decoration: none;
 	color:#7f8c8d;
+}
 
+h1 > a {
+	color: #c0392b;
+	position: relative;
 }
 
 /* I DON'T KNOW WHAT THIS IS

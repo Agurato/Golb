@@ -2,7 +2,10 @@
 	include_once('begin.php');
 	// beginHTML('Golb','css/style.css');
 
-	function loginForm() {
+	function loginForm($loginPage="login.php") {
+		// Input the form to log in
+		// $loginPage = page where infos are checked and where you are logged in
+			// If ?page=something : redirect to something after you are logged in (home page otherwise)
 	?>
 		<!-- Login dialog box -->
 		<div id="loginModal" class="modalDialog">
@@ -16,8 +19,8 @@
 							echo "<p>No error !</p>";
 						}
 					}
+					echo '<form method="post" action="'.$loginPage.'">';
 				?>
-				<form method="post" action="login.php">
 					<div>
 						<p class="loginForm">
 							<label for="login">Username</label>
@@ -38,7 +41,7 @@
 	<?php
 	}
 
-	function registerForm() {
+	function registerForm($registerPage="register.php") {
 	?>
 		<!-- Register dialog box -->
 		<div id="registerModal" class="modalDialog">
@@ -85,8 +88,8 @@
 							echo "</p>";
 						}
 					}
+					echo '<form method="post" action="'.$registerPage.'">';
 				?>
-				<form method="post" action="register.php">
 					<p class="registerForm">
 						<label for="username" >Username</label><br />
 						<input type="text" name="username" id="username" />

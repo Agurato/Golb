@@ -6,6 +6,11 @@
 	
 	session_destroy();
 	unset($_SESSION['login']);
-	echo '<meta http-equiv="refresh" content="0;URL='.$_GET["page"].'" /> ';
+	if(isset($_GET["page"])) {
+		header('Location :'.$_GET["page"]);
+	}
+	else {
+		header('Location :index.php');
+	}
 	endHTML();
 ?>

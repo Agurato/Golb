@@ -15,7 +15,7 @@
 
 			<!-- Title & subtitle -->
 			<div class="titles">
-				<h1>Golb</h1>
+				<h1><a href="index.php">Golb</a></h1>
 				<p class="note">Petit Golb amusant pour les golbers affutés</p>
 			</div>			
 		</div>
@@ -30,11 +30,13 @@
 						<li class="leftAlign"><a href="index.php">Messages</a></li>
 						<?php
 						if(!empty($_SESSION['login'])){
-							// echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';	
-							// echo '<li class="rightAlign"><a href="index.php">Administration</a></li>';
+							// echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';
 							// echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
 							echo '<li class="rightAlign"><a href="disconnect.php?page=index.php">Se déconnecter</a></li>';
-							echo '<li class="rightAlign login"><a href="index.php">'.$_SESSION['login'].'</a></li>';
+							echo '<li class="rightAlign login"><a href="users/'.$_SESSION['login'].'">'.$_SESSION['login'].'</a></li>';
+							if($_SESSION["userLevel"] == "2") {
+								echo '<li class="rightAlign"><a href="admin.php">Administration</a></li>';
+							}
 
 						}
 						else{

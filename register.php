@@ -11,14 +11,14 @@
 
 		// INVALID USERNAME
 		// If there is any ';' => ERROR
-		if(strpos($_POST["username"], ';') !== false) {
+		if(strpos($_POST["username"], ':') !== false) {
 			$register = false;
 			$error .= "2";
 		}
 
 		// INVALID EMAIL
 		// If there is any ';' => ERROR
-		if(strpos($mail, ';') !== false) {
+		if(strpos($mail, ':') !== false) {
 			$register = false;
 			$error .= "4";
 		}
@@ -40,13 +40,9 @@
 			$error .= "5";
 		}
 
-		// INVALID EMAIL OR USERNAME (ALREADY USED)
-		$usernameAvailable = true;
-		$emailAvailable = true;
-
-		if(($handle = fopen("accounts.csv", "r")) !== false) {
-			while(($data = fgetcsv($handle, 1000, ";")) !== false) {
-				if(count($data) == 3) {
+		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
+				if(count($data) == 4) {
 					if($data[0] == $_POST["username"]) {
 						$register = false;
 						$error .= "1";
@@ -61,19 +57,31 @@
 		}
 
 		if($register) {
-			$newUser = array($_POST["username"], password_hash($_POST["password1"], PASSWORD_BCRYPT), $mail);
+			$newUser = array($_POST["username"], password_hash($_POST["password1"], PASSWORD_BCRYPT), $mail, "1");
 
-			$file = fopen("accounts.csv", "a");
-
-			fputcsv($file, $newUser, ";");
-
+			$file = fopen("users/accounts.csv", "a");
+			fputcsv($file, $newUser, ":");
 			fclose($file);
 
-			echo '<meta http-equiv="refresh" content="0;URL=index.php#loginModal" />';
+			$userDir = "users/".strtolower($_POST["username"]);
+			mkdir($userDir);
+			copy("users/vincent/index.php", $userDir."/index.php");
+
+			if(isset($_GET["page"])) {
+				header('Location: '.$_GET["page"].'#loginModal');
+			}
+			else {
+				header('Location: index.php#loginModal');
+			}
 		}
 
 		if($error != "") {
-			echo '<meta http-equiv="refresh" content="0;URL=index.php?error='.$error.'#registerModal" /> ';
+			if(isset($_GET["page"])) {
+				header('Location: '.$_GET["page"].'?error='.$error.'#registerModal');
+			}
+			else {
+				header('Location: index.php?error='.$error.'#registerModal');
+			}
 		}
 		
 	}
