@@ -15,7 +15,11 @@
 				// The login form is register.php (at the root of the project) and we want to redirect to this page once registered
 				registerForm("../../register.php?page=users/".$dirname[count($dirname)-1]."/index.php");
 				// The password change form
-				passwordForm("../../passwordChange.php?page=users/".$dirname[count($dirname)-1]."/index.php");
+				changePasswordForm("../../passwordChange.php?page=users/".$dirname[count($dirname)-1]."/index.php");
+				// The form to delete your account
+				deleteAccountForm("../../deleteAccount.php");
+				// The form to retrieve the password
+				retrievePasswordForm("../../retrievePassword.php");
 			?>
 
 			<!-- Title & subtitle -->

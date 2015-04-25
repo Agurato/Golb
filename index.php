@@ -33,7 +33,7 @@
 							// echo '<li class="leftAlign"><a href="index.php">Profil</a></li>';
 							// echo '<li class="rightAlign"><a href="index.php?deconnect=true">Se déconnecter</a></li>';
 							echo '<li class="rightAlign"><a href="disconnect.php?page=index.php">Se déconnecter</a></li>';
-							echo '<li class="rightAlign login"><a href="users/'.$_SESSION['login'].'">'.$_SESSION['login'].'</a></li>';
+							echo '<li class="rightAlign login"><a href="users/'.strtolower($_SESSION['login']).'">'.$_SESSION['login'].'</a></li>';
 							if($_SESSION["userLevel"] == "2") {
 								echo '<li class="rightAlign"><a href="admin.php">Administration</a></li>';
 							}

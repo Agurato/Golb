@@ -2,7 +2,7 @@
 	include_once('begin.php');
 	// beginHTML('Golb','css/style.css');
 
-	function loginForm($loginPage="login.php") {
+	function loginForm($loginPage = "login.php") {
 		// Input the form to log in
 		// $loginPage = page where infos are checked and where you are logged in
 			// If ?page=something : redirect to something after you are logged in (home page otherwise)
@@ -41,7 +41,7 @@
 	<?php
 	}
 
-	function registerForm($registerPage="register.php") {
+	function registerForm($registerPage = "register.php") {
 	?>
 		<!-- Register dialog box -->
 		<div id="registerModal" class="modalDialog">
@@ -116,7 +116,7 @@
 	<?php
 	}
 
-	function passwordForm($passPage = "passwordChange.php") {
+	function changePasswordForm($chgPasswordPage = "passwordChange.php") {
 	?>
 		<div id="chgPasswordModal" class="modalDialog">
 			<div>
@@ -140,7 +140,7 @@
 							echo "</p>";
 						}
 					}
-					echo '<form method="post" action="'.$passPage.'">';
+					echo '<form method="post" action="'.$chgPasswordPage.'">';
 				?>
 					
 				<p class="registerForm">
@@ -168,5 +168,52 @@
 	<?php
 	}
 
-	// endHTML()
+	function deleteAccountForm($deletePage = "deleteAccount.php") {
+	?>
+		<div id="delAccountModal" class="modalDialog">
+			<div>
+				<?php
+					if(isset($_GET["error"])) {
+						$error = $_GET["error"];
+						$count = 0;
+						if($error != "") {
+							echo "<p>";
+							if(strpos($error, "1") !== false) {
+								echo "Wrong password !";
+							}
+							echo "</p>";
+						}
+					}
+					echo '<form method="post" action="'.$deletePage.'">';
+				?>
+					
+				<p class="registerForm">
+					<label for="passwordDelete">Password</label><br />
+					<input type="password" name="passwordDelete" id="passwordDelete" maxlength="72"/>
+				</p>
+				<p>
+					<input type="radio" name="deleteOption" id="deletePartly" value="deletePartly" checked="checked" />
+					<label for="deletePartly">Delete only my account (posts, comments &amp; notes will be saved)</label>
+					<br />
+					<input type="radio" name="deleteOption" id="deleteAll" value="deleteAll" />
+					<label for="deleteAll">Delete my account and all my posts, comments &amp; notes</label>
+				</p>
+				<p class="registerForm">
+					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Password lost ?</a><br />
+					<input type="submit" class="send" value="Delete my account" />
+				</p>
+
+
+				</form>
+				<a href="" title="Close" class="close" >Close</a>
+			</div>
+		</div>
+	<?php
+	}
+
+	function retrievePasswordForm($retrievePasswordPage = "passwordRetrieve.php") {
+	?>
+		
+	<?php
+	}
 ?>
