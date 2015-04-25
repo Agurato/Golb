@@ -7,10 +7,10 @@
 	session_destroy();
 	unset($_SESSION['login']);
 	if(isset($_GET["page"])) {
-		header('Location :'.$_GET["page"]);
+		header('Location: '.$_GET["page"]);
 	}
 	else {
-		header('Location :index.php');
+		header('Location: index.php');
 	}
 	endHTML();
 ?>

@@ -91,24 +91,76 @@
 					echo '<form method="post" action="'.$registerPage.'">';
 				?>
 					<p class="registerForm">
-						<label for="username" >Username</label><br />
-						<input type="text" name="username" id="username" />
+						<label for="usernameSignup" >Username</label><br />
+						<input type="text" name="usernameSignup" id="usernameSignup" />
 					</p>
 					<p class="registerForm">
-						<label for="email">E-mail address</label><br />
-						<input type="text" name="email" id="email" />
+						<label for="emailSignup">E-mail address</label><br />
+						<input type="text" name="emailSignup" id="emailSignup" />
 					</p>
 					<p class="registerForm">
-						<label for="password1">Password</label><br />
-						<input type="password" name="password1" id="password1" maxlength="72"/>
+						<label for="passwordSignup1">Password</label><br />
+						<input type="password" name="passwordSignup1" id="passwordSignup1" maxlength="72"/>
 					</p>
 					<p class="registerForm">
-						<label for="password2">Re-enter password</label><br />
-						<input type="password" name="password2" id="password2" maxlength="72"/>
+						<label for="passwordSignup2">Re-enter password</label><br />
+						<input type="password" name="passwordSignup2" id="passwordSignup2" maxlength="72"/>
 					</p>
 					<p class="registerForm">
 						<input type="submit" class="send" value="Register" />
 					</p>
+				</form>
+				<a href="" title="Close" class="close" >Close</a>
+			</div>
+		</div>
+	<?php
+	}
+
+	function passwordForm($passPage = "passwordChange.php") {
+	?>
+		<div id="chgPasswordModal" class="modalDialog">
+			<div>
+				<?php
+					if(isset($_GET["error"])) {
+						$error = $_GET["error"];
+						$count = 0;
+						if($error != "") {
+							echo "<p>";
+							if(strpos($error, "1") !== false) {
+								echo "Wrong password !";
+								$count ++;
+							}
+							if(strpos($error, "2") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "New passwords are different !";
+								$count ++;
+							}
+							echo "</p>";
+						}
+					}
+					echo '<form method="post" action="'.$passPage.'">';
+				?>
+					
+				<p class="registerForm">
+					<label for="passwordChange1">Actual password</label><br />
+					<input type="password" name="passwordChange1" id="passwordChange1" maxlength="72"/>
+				</p>
+				<p class="registerForm">
+					<label for="passwordChange2">New password</label><br />
+					<input type="password" name="passwordChange2" id="passwordChange2" maxlength="72"/>
+				</p>
+				<p class="registerForm">
+					<label for="passwordChange3">Re-enter the new password</label><br />
+					<input type="password" name="passwordChange3" id="passwordChange3" maxlength="72"/>
+				</p>
+				<p class="registerForm">
+					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Password lost ?</a><br />
+					<input type="submit" class="send" value="Change password" />
+				</p>
+
+
 				</form>
 				<a href="" title="Close" class="close" >Close</a>
 			</div>

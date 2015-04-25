@@ -14,7 +14,6 @@
 						// Put the real case on the username
 						$_POST["login"] = $data[0];
 						if(password_verify($_POST["password"], $data[1])) {
-							echo "<p>Logged in !</p>";
 							$connected = true;
 							beginSession();
 							$_SESSION["userLevel"] = $data[3];
