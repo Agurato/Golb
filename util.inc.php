@@ -13,29 +13,32 @@
 				<?php
 					if(isset($_GET["error"])) {
 						if($_GET["error"] == true) {
-							echo "<p>Username or password incorrect</p>";
+							echo "<p>Nom d'utilisateur ou mot de passe incorrect</p>";
 						}
 						else {
-							echo "<p>No error !</p>";
+							echo "<p>Pas d'erreur !</p>";
 						}
 					}
 					echo '<form method="post" action="'.$loginPage.'">';
 				?>
 					<div>
 						<p class="loginForm">
-							<label for="login">Username</label>
-							<input type="text" name="login" id="login" />
+							<label for="login">Nom d'utilisateur</label>
+							<input type="text" name="login" id="login" maxlength="32" />
 						</p>
 					</div>
 					<div class="leftForm">
 						<p class="loginForm">
-							<label for="password">Password</label>
-							<input type="password" name="password" id="password" />
-							<input type="submit" class="send" value="Login" />
+							<label for="password">Mot de passe</label>
+							<input type="password" name="password" id="password" maxlength="72" />
+							<input type="submit" class="send" value="Se connecter" />
 						</p>
 					</div>
+					<p class="loginForm">
+						<a href="index.php#passwordLost" style="font-size:10pt">Mot de passe perdu ?</a><br />
+					</p>
 				</form>
-				<a href="" title="Close" class="close" >Close</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
@@ -54,35 +57,35 @@
 						if($error != "") {
 							echo "<p>";
 							if(strpos($error, "1") !== false) {
-								echo "Username already exists";
+								echo "Nom d'utilisateur déjà utilisé";
 								$count ++;
 							}
 							if(strpos($error, "2") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "Invalid username";
+								echo "Nome d'utilisateur invalide";
 								$count ++;
 							}
 							if(strpos($error, "3") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "Email address already exists";
+								echo "Adresse e-mail déjà utilisée";
 								$count ++;
 							}
 							if(strpos($error, "4") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "Invalid email address";
+								echo "Adresse e-mail invalide";
 								$count ++;
 							}
 							if(strpos($error, "5") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "Passwords do not match";
+								echo "Les mots de passe ne correspondent pas";
 								$count ++;
 							}
 							echo "</p>";
@@ -91,26 +94,26 @@
 					echo '<form method="post" action="'.$registerPage.'">';
 				?>
 					<p class="registerForm">
-						<label for="usernameSignup" >Username</label><br />
-						<input type="text" name="usernameSignup" id="usernameSignup" />
+						<label for="usernameSignup" >Nom d'utilisateur</label><br />
+						<input type="text" name="usernameSignup" id="usernameSignup" maxlength="32" />
 					</p>
 					<p class="registerForm">
-						<label for="emailSignup">E-mail address</label><br />
+						<label for="emailSignup">Adresse e-mail</label><br />
 						<input type="text" name="emailSignup" id="emailSignup" />
 					</p>
 					<p class="registerForm">
-						<label for="passwordSignup1">Password</label><br />
+						<label for="passwordSignup1">Mot de passe</label><br />
 						<input type="password" name="passwordSignup1" id="passwordSignup1" maxlength="72"/>
 					</p>
 					<p class="registerForm">
-						<label for="passwordSignup2">Re-enter password</label><br />
+						<label for="passwordSignup2">Ré-entrez le mot de passe</label><br />
 						<input type="password" name="passwordSignup2" id="passwordSignup2" maxlength="72"/>
 					</p>
 					<p class="registerForm">
-						<input type="submit" class="send" value="Register" />
+						<input type="submit" class="send" value="S'enregistrer" />
 					</p>
 				</form>
-				<a href="" title="Close" class="close" >Close</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
@@ -127,14 +130,14 @@
 						if($error != "") {
 							echo "<p>";
 							if(strpos($error, "1") !== false) {
-								echo "Wrong password !";
+								echo "Mauvais mot de passe !";
 								$count ++;
 							}
 							if(strpos($error, "2") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "New passwords are different !";
+								echo "Les nouveaux mots de passe sont différents !";
 								$count ++;
 							}
 							echo "</p>";
@@ -144,25 +147,25 @@
 				?>
 					
 				<p class="registerForm">
-					<label for="passwordChange1">Actual password</label><br />
+					<label for="passwordChange1">Mot de passe actuel</label><br />
 					<input type="password" name="passwordChange1" id="passwordChange1" maxlength="72"/>
 				</p>
 				<p class="registerForm">
-					<label for="passwordChange2">New password</label><br />
+					<label for="passwordChange2">Nouveau mot de passe</label><br />
 					<input type="password" name="passwordChange2" id="passwordChange2" maxlength="72"/>
 				</p>
 				<p class="registerForm">
-					<label for="passwordChange3">Re-enter the new password</label><br />
+					<label for="passwordChange3">Ré-entrez le nouveau mot de passe</label><br />
 					<input type="password" name="passwordChange3" id="passwordChange3" maxlength="72"/>
 				</p>
 				<p class="registerForm">
-					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Password lost ?</a><br />
+					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
 					<input type="submit" class="send" value="Change password" />
 				</p>
 
 
 				</form>
-				<a href="" title="Close" class="close" >Close</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
@@ -179,33 +182,45 @@
 						if($error != "") {
 							echo "<p>";
 							if(strpos($error, "1") !== false) {
-								echo "Wrong password !";
+								echo "Mauvais mot de passe !";
 							}
 							echo "</p>";
 						}
 					}
-					echo '<form method="post" action="'.$deletePage.'">';
+					if(isset($_GET['account'])) {
+						echo '<form method="post" action="'.$deletePage.'?account='.$_GET['account'].'">';
+					}
+					else {
+						echo '<form method="post" action="'.$deletePage.'">';
+					}
 				?>
-					
+				
 				<p class="registerForm">
-					<label for="passwordDelete">Password</label><br />
+					<label for="passwordDelete">Mot de passe</label><br />
 					<input type="password" name="passwordDelete" id="passwordDelete" maxlength="72"/>
 				</p>
 				<p>
 					<input type="radio" name="deleteOption" id="deletePartly" value="deletePartly" checked="checked" />
-					<label for="deletePartly">Delete only my account (posts, comments &amp; notes will be saved)</label>
+					<label for="deletePartly">Détruire les données du compte (posts, commentaires et notes seront sauvegardés)</label>
 					<br />
 					<input type="radio" name="deleteOption" id="deleteAll" value="deleteAll" />
-					<label for="deleteAll">Delete my account and all my posts, comments &amp; notes</label>
+					<label for="deleteAll">Détruire les données du compte et tous les posts, commentaires et notes liés à celui-ci</label>
 				</p>
 				<p class="registerForm">
-					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Password lost ?</a><br />
-					<input type="submit" class="send" value="Delete my account" />
+					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
+					<?php
+					if(isset($_GET['account'])) {
+						echo '<input type="submit" class="send" value="Détruire le compte '.$_GET['account'].'" />';
+					}
+					else {
+						echo '<input type="submit" class="send" value="Détruire le compte" />';
+					}
+					?>
 				</p>
 
 
 				</form>
-				<a href="" title="Close" class="close" >Close</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
@@ -215,5 +230,29 @@
 	?>
 		
 	<?php
+	}
+
+	function usersTable($accountsFile = "accounts.csv", $imgDir = "img/") {
+		$result = '';
+		$result .= '<table>';
+
+		$result .= '<tr><th>Username</th><th>Mail</th><th>User level</th><th>Signature</th><th colspan="2">Options</th></tr>';
+
+		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
+				if(count($data) == 5) {
+					$result .= '<tr><td class="usernameTD">'.$data[0].'</td><td class="mailTD">'.$data[2].'</td>';
+					$result .= '<td class="userlevelTD">'.$data[3].'</td><td class="signatureTD">'.$data[4].'</td>';
+					$result .= '<td class="img"><a href="admin.php?account='.$data[0].'#"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
+					$result .= '<td class="img"><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
+					$result .= '</tr>';
+				}
+			}
+			fclose($handle);
+		}
+
+		$result .= '</table>';
+
+		return $result;
 	}
 ?>

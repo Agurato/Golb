@@ -42,7 +42,7 @@
 
 		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
-				if(count($data) == 4) {
+				if(count($data) == 5) {
 					if($data[0] == $_POST["usernameSignup"]) {
 						$register = false;
 						$error .= "1";
@@ -57,7 +57,7 @@
 		}
 
 		if($register) {
-			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, "1");
+			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 1, "");
 
 			$file = fopen("users/accounts.csv", "a");
 			fputcsv($file, $newUser, ":");
@@ -65,7 +65,12 @@
 
 			$userDir = "users/".strtolower($_POST["usernameSignup"]);
 			mkdir($userDir);
-			copy("users/vincent/index.php", $userDir."/index.php");
+
+			$file = fopen($userDir."/.userAccount.csv", "w");
+			fputcsv($file, $newUser, ":");
+			fclose($file);
+
+			copy("users/usersIndex.php", $userDir."/index.php");
 
 			if(isset($_GET["page"])) {
 				header('Location: '.$_GET["page"].'#loginModal');

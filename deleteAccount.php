@@ -5,12 +5,14 @@
 	beginSession();
 
 	$delete = true;
+	$lineCounter = 0;
+	$error = "";
 
 	if(isset($_POST["passwordDelete"])) {
 
 		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
-				if(count($data) == 4) {
+				if(count($data) == 5) {
 					if(strtolower($data[0]) == strtolower($_SESSION["login"])) {
 						if(! password_verify($_POST["passwordDelete"], $data[1])) {
 							$delete = false;
