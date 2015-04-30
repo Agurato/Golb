@@ -1,7 +1,7 @@
 <?php
 	include('begin.php');
 	include('util.inc.php');
-	beginHTML('Golb','css/style.css');
+	beginHTML('Golb','../css/styles.css');
 	beginSession();
 
 	$delete = true;
@@ -10,7 +10,7 @@
 
 	if(isset($_POST["passwordDelete"])) {
 
-		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+		if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					if(strtolower($data[0]) == strtolower($_SESSION["login"])) {
@@ -27,18 +27,18 @@
 		}
 
 		if($delete) {
-			if(($fileLines = file("users/accounts.csv")) !== false) {
+			if(($fileLines = file("../users/accounts.csv")) !== false) {
 				unset($fileLines[$lineToEdit]);
 				$fileLines = array_values($fileLines);
 
-				file_put_contents("users/accounts.csv", $fileLines, LOCK_EX);
-				rmdir_recursive("users/".strtolower($_SESSION["login"]));
+				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
+				rmdir_recursive("../users/".strtolower($_SESSION["login"]));
 				header('Location: disconnect.php');
 			}
 		}
 
 		if($error != "") {
-			header('Location: users/'.strtolower($_SESSION["login"]).'?error='.$error.'#delAccountModal');
+			header('Location: ../users/'.strtolower($_SESSION["login"]).'?error='.$error.'#delAccountModal');
 		}
 	}
 

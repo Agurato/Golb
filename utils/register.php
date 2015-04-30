@@ -1,7 +1,7 @@
 <?php
 	include('begin.php');
 	include('util.inc.php');
-	beginHTML('Golb','css/style.css');
+	beginHTML('Golb','../css/styles.css');
 
 	if(isset($_POST["usernameSignup"]) && isset($_POST["passwordSignup1"]) && isset($_POST["passwordSignup2"]) && isset($_POST["emailSignup"])) {
 		$register = true;
@@ -40,7 +40,7 @@
 			$error .= "5";
 		}
 
-		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+		if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					if($data[0] == $_POST["usernameSignup"]) {
@@ -57,35 +57,35 @@
 		}
 
 		if($register) {
-			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 1, "");
+			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 2, "");
 
-			$file = fopen("users/accounts.csv", "a");
+			$file = fopen("../users/accounts.csv", "a");
 			fputcsv($file, $newUser, ":");
 			fclose($file);
 
-			$userDir = "users/".strtolower($_POST["usernameSignup"]);
+			$userDir = "../users/".strtolower($_POST["usernameSignup"]);
 			mkdir($userDir);
 
 			$file = fopen($userDir."/.userAccount.csv", "w");
 			fputcsv($file, $newUser, ":");
 			fclose($file);
 
-			copy("users/usersIndex.php", $userDir."/index.php");
+			copy("../users/usersIndex.php", $userDir."/index.php");
 
 			if(isset($_GET["page"])) {
-				header('Location: '.$_GET["page"].'#loginModal');
+				header('Location: ../'.$_GET["page"]);
 			}
 			else {
-				header('Location: index.php#loginModal');
+				header('Location: ../index.php#loginModal');
 			}
 		}
 
 		if($error != "") {
 			if(isset($_GET["page"])) {
-				header('Location: '.$_GET["page"].'?error='.$error.'#registerModal');
+				header('Location: ../'.$_GET["page"].'?error='.$error.'#registerModal');
 			}
 			else {
-				header('Location: index.php?error='.$error.'#registerModal');
+				header('Location: ../index.php?error='.$error.'#registerModal');
 			}
 		}
 		

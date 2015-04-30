@@ -7,9 +7,6 @@
 	<!-- HEADER -->
 	<div id="header">
 		<?php
-			if($_SESSION["login"] == null) {
-				header('Location: ../../index.php');
-			}
 			// $dirname is the array which contains the names of the directories in the path
 			$dirname = explode("/", getcwd());
 			// The login form is login.php (at the root of the project) and we want to redirect to this page once logged in
@@ -69,7 +66,7 @@
 					<input type="text" name="email" id="email" 
 					<?php
 						if(!empty($_SESSION['login'])) {
-							if((strtolower($_SESSION['login']) == strtolower($currentUser[0])) || $_SESSION["userLevel"] == 2) {
+							if(strtolower($_SESSION['login']) == strtolower($currentUser[0])) {
 								echo 'value="'.$currentUser[2].'"';
 							}
 						}

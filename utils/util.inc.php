@@ -1,8 +1,6 @@
 <?php
-	include_once('begin.php');
-	// beginHTML('Golb','css/style.css');
 
-	function loginForm($loginPage = "login.php") {
+	function loginForm($loginPage = "utils/login.php") {
 		// Input the form to log in
 		// $loginPage = page where infos are checked and where you are logged in
 			// If ?page=something : redirect to something after you are logged in (home page otherwise)
@@ -44,7 +42,7 @@
 	<?php
 	}
 
-	function registerForm($registerPage = "register.php") {
+	function registerForm($registerPage = "utils/register.php") {
 	?>
 		<!-- Register dialog box -->
 		<div id="registerModal" class="modalDialog">
@@ -119,7 +117,7 @@
 	<?php
 	}
 
-	function changePasswordForm($chgPasswordPage = "passwordChange.php") {
+	function changePasswordForm($chgPasswordPage = "utils/passwordChange.php") {
 	?>
 		<div id="chgPasswordModal" class="modalDialog">
 			<div>
@@ -171,7 +169,7 @@
 	<?php
 	}
 
-	function deleteAccountForm($deletePage = "deleteAccount.php") {
+	function deleteAccountForm($deletePage = "utils/deleteAccount.php") {
 	?>
 		<div id="delAccountModal" class="modalDialog">
 			<div>
@@ -226,24 +224,24 @@
 	<?php
 	}
 
-	function retrievePasswordForm($retrievePasswordPage = "passwordRetrieve.php") {
+	function retrievePasswordForm($retrievePasswordPage = "utils/passwordRetrieve.php") {
 	?>
 		
 	<?php
 	}
 
-	function usersTable($accountsFile = "accounts.csv", $imgDir = "img/") {
+	function usersTable($accountsFile = "users/accounts.csv", $imgDir = "img/") {
 		$result = '';
 		$result .= '<table>';
 
 		$result .= '<tr><th>Username</th><th>Mail</th><th>User level</th><th>Signature</th><th colspan="2">Options</th></tr>';
 
-		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+		if(($handle = fopen($accountsFile, "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					$result .= '<tr><td class="usernameTD">'.$data[0].'</td><td class="mailTD">'.$data[2].'</td>';
 					$result .= '<td class="userlevelTD">'.$data[3].'</td><td class="signatureTD">'.$data[4].'</td>';
-					$result .= '<td class="img"><a href="admin.php?account='.$data[0].'#"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
+					$result .= '<td class="img"><a href="users/'.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
 					$result .= '<td class="img"><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
 					$result .= '</tr>';
 				}
@@ -251,6 +249,7 @@
 			fclose($handle);
 		}
 
+		$result .= '<tr><td class="img" colspan="6" ><a href="admin.php#registerModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
 		$result .= '</table>';
 
 		return $result;

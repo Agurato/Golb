@@ -1,7 +1,7 @@
 <?php
-	include_once('begin.php');
-	include_once('util.inc.php');
-	beginHTML('Golb','css/test.css');
+	include_once('utils/begin.php');
+	include_once('utils/util.inc.php');
+	beginHTML('Golb','css/styles.css');
 	beginSession();
 ?>
 
@@ -10,8 +10,8 @@
 		<!-- Login dialog box -->
 		<?php
 			loginForm();
-			registerForm();
-			deleteAccountForm("deleteAccountAdmin.php");
+			registerForm("utils/register.php?page=admin.php");
+			deleteAccountForm("utils/deleteAccountAdmin.php");
 		?>
 
 		<!-- Title & subtitle -->
@@ -30,7 +30,7 @@
 				<li class="leftAlign"><a href="index.php">Messages</a></li>
 				<?php
 				if(!empty($_SESSION['login'])){
-					echo '<li class="rightAlign logoutLink"><a href="disconnect.php?page=index.php">Se déconnecter</a></li>';
+					echo '<li class="rightAlign logoutLink"><a href="utils/disconnect.php?page=index.php">Se déconnecter</a></li>';
 					echo '<li class="rightAlign loginLink"><a href="users/'.strtolower($_SESSION['login']).'">'.$_SESSION['login'].'</a></li>';
 					if($_SESSION["userLevel"] == "2") {
 						echo '<li class="rightAlign adminLink"><a href="admin.php">Administration</a></li>';

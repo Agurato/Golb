@@ -1,7 +1,7 @@
 <?php
 	include('begin.php');
 	include('util.inc.php');
-	beginHTML('Golb','css/style.css');
+	beginHTML('Golb','../css/styles.css');
 	beginSession();
 
 	$delete = true;
@@ -15,12 +15,12 @@
 			$delete = false;
 		}
 
-		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+		if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				echo "Line n°".$lineCounter."<br />";
 				if(strtolower($data[0]) == strtolower($_GET["account"])) {
 
-					if(($adminFile = fopen("users/".strtolower($_SESSION['login'])."/.userAccount.csv", "r")) !== false) {
+					if(($adminFile = fopen("../users/".strtolower($_SESSION['login'])."/.userAccount.csv", "r")) !== false) {
 						if(($admin = fgetcsv($adminFile, 1000, ":")) !== false) {
 							if(! password_verify($_POST["passwordDelete"], $admin[1])) {
 								echo '<p>Mot de passe pas ok</p>';
@@ -42,22 +42,22 @@
 		}
 
 		if($delete) {
-			if(($fileLines = file("users/accounts.csv")) !== false) {
+			if(($fileLines = file("../users/accounts.csv")) !== false) {
 				unset($fileLines[$lineToEdit]);
 				$fileLines = array_values($fileLines);
 
-				file_put_contents("users/accounts.csv", $fileLines, LOCK_EX);
-				rmdir_recursive("users/".strtolower($_GET["account"]));
+				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
+				rmdir_recursive("../users/".strtolower($_GET["account"]));
 
-				header('Location: admin.php');
+				header('Location: ../admin.php');
 			}
 		}
 
 		if($error != "") {
-			header('Location: admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
+			header('Location: ../admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
 		}
 
-		header('Location: admin.php');
+		header('Location: ../admin.php');
 	}
 
 	function rmdir_recursive($dir) {

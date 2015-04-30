@@ -1,13 +1,13 @@
 <?php
 	include('begin.php');
 	include('util.inc.php');
-	beginHTML('Golb','css/style.css');
+	beginHTML('Golb','../css/styles.css');
 
 	$connected = false;
 
 	if(isset($_POST["login"]) && isset($_POST["password"])) {
 
-		if(($handle = fopen("users/accounts.csv", "r")) !== false) {
+		if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					if(strtolower($data[0]) == strtolower($_POST["login"])) {
@@ -20,10 +20,10 @@
 							$_SESSION["userLevel"] = $data[3];
 							$_SESSION["signature"] = $data[4];
 							if(isset($_GET["page"])) {
-								header('Location: '.$_GET["page"]); 
+								header('Location: ../'.$_GET["page"]); 
 							}
 							else {
-								header('Location: index.php');
+								header('Location: ../index.php');
 							}
 						}
 					}
@@ -35,10 +35,10 @@
 
 	if(! $connected) {
 		if(isset($_GET["page"])) {
-			header('Location: '.$_GET["page"].'?error=true#loginModal'); 
+			header('Location: ../'.$_GET["page"].'?error=true#loginModal'); 
 		}
 		else {
-			header('Location: index.php?error=true#loginModal');
+			header('Location: ../index.php?error=true#loginModal');
 		}
 	}
 
