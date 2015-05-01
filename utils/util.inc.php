@@ -1,5 +1,6 @@
 <?php
 
+	// Modal window to sign in
 	function loginForm($loginPage = "utils/login.php") {
 		// Input the form to log in
 		// $loginPage = page where infos are checked and where you are logged in
@@ -8,6 +9,7 @@
 		<!-- Login dialog box -->
 		<div id="loginModal" class="modalDialog">
 			<div>
+				<!-- ERROR DISPLAY -->
 				<?php
 					if(isset($_GET["error"])) {
 						if($_GET["error"] == true) {
@@ -19,6 +21,7 @@
 					}
 					echo '<form method="post" action="'.$loginPage.'">';
 				?>
+					<!-- Form inputs -->
 					<div>
 						<p class="loginForm">
 							<label for="login">Nom d'utilisateur</label>
@@ -42,6 +45,7 @@
 	<?php
 	}
 
+	// Modal window to sign up
 	function registerForm($registerPage = "utils/register.php") {
 	?>
 		<!-- Register dialog box -->
@@ -91,6 +95,7 @@
 					}
 					echo '<form method="post" action="'.$registerPage.'">';
 				?>
+					<!-- Form inputs -->
 					<p class="registerForm">
 						<label for="usernameSignup" >Nom d'utilisateur</label><br />
 						<input type="text" name="usernameSignup" id="usernameSignup" maxlength="32" />
@@ -117,10 +122,12 @@
 	<?php
 	}
 
+	// Modal window to change the password
 	function changePasswordForm($chgPasswordPage = "utils/passwordChange.php") {
 	?>
 		<div id="chgPasswordModal" class="modalDialog">
 			<div>
+				<!-- ERROR DISPLAY -->
 				<?php
 					if(isset($_GET["error"])) {
 						$error = $_GET["error"];
@@ -143,24 +150,23 @@
 					}
 					echo '<form method="post" action="'.$chgPasswordPage.'">';
 				?>
-					
-				<p class="registerForm">
-					<label for="passwordChange1">Mot de passe actuel</label><br />
-					<input type="password" name="passwordChange1" id="passwordChange1" maxlength="72"/>
-				</p>
-				<p class="registerForm">
-					<label for="passwordChange2">Nouveau mot de passe</label><br />
-					<input type="password" name="passwordChange2" id="passwordChange2" maxlength="72"/>
-				</p>
-				<p class="registerForm">
-					<label for="passwordChange3">Ré-entrez le nouveau mot de passe</label><br />
-					<input type="password" name="passwordChange3" id="passwordChange3" maxlength="72"/>
-				</p>
-				<p class="registerForm">
-					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
-					<input type="submit" class="send" value="Change password" />
-				</p>
-
+					<!-- Form inputs -->
+					<p class="registerForm">
+						<label for="passwordChange1">Mot de passe actuel</label><br />
+						<input type="password" name="passwordChange1" id="passwordChange1" maxlength="72"/>
+					</p>
+					<p class="registerForm">
+						<label for="passwordChange2">Nouveau mot de passe</label><br />
+						<input type="password" name="passwordChange2" id="passwordChange2" maxlength="72"/>
+					</p>
+					<p class="registerForm">
+						<label for="passwordChange3">Ré-entrez le nouveau mot de passe</label><br />
+						<input type="password" name="passwordChange3" id="passwordChange3" maxlength="72"/>
+					</p>
+					<p class="registerForm">
+						<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
+						<input type="submit" class="send" value="Change password" />
+					</p>
 
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>
@@ -169,10 +175,12 @@
 	<?php
 	}
 
+	// Modal window to delete an account
 	function deleteAccountForm($deletePage = "utils/deleteAccount.php") {
 	?>
 		<div id="delAccountModal" class="modalDialog">
 			<div>
+				<!-- ERROR DISPLAY -->
 				<?php
 					if(isset($_GET["error"])) {
 						$error = $_GET["error"];
@@ -192,30 +200,29 @@
 						echo '<form method="post" action="'.$deletePage.'">';
 					}
 				?>
-				
-				<p class="registerForm">
-					<label for="passwordDelete">Mot de passe</label><br />
-					<input type="password" name="passwordDelete" id="passwordDelete" maxlength="72"/>
-				</p>
-				<p>
-					<input type="radio" name="deleteOption" id="deletePartly" value="deletePartly" checked="checked" />
-					<label for="deletePartly">Détruire les données du compte (posts, commentaires et notes seront sauvegardés)</label>
-					<br />
-					<input type="radio" name="deleteOption" id="deleteAll" value="deleteAll" />
-					<label for="deleteAll">Détruire les données du compte et tous les posts, commentaires et notes liés à celui-ci</label>
-				</p>
-				<p class="registerForm">
-					<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
-					<?php
-					if(isset($_GET['account'])) {
-						echo '<input type="submit" class="send" value="Détruire le compte '.$_GET['account'].'" />';
-					}
-					else {
-						echo '<input type="submit" class="send" value="Détruire le compte" />';
-					}
-					?>
-				</p>
-
+					<!-- Form inputs -->
+					<p class="registerForm">
+						<label for="passwordDelete">Mot de passe</label><br />
+						<input type="password" name="passwordDelete" id="passwordDelete" maxlength="72"/>
+					</p>
+					<p>
+						<input type="radio" name="deleteOption" id="deletePartly" value="deletePartly" checked="checked" />
+						<label for="deletePartly">Détruire les données du compte (posts, commentaires et notes seront sauvegardés)</label>
+						<br />
+						<input type="radio" name="deleteOption" id="deleteAll" value="deleteAll" />
+						<label for="deleteAll">Détruire les données du compte et tous les posts, commentaires et notes liés à celui-ci</label>
+					</p>
+					<p class="registerForm">
+						<a href="index.php#passwordLost" style="float:right;margin-right:5px;">Mot de passe perdu ?</a><br />
+						<?php
+						if(isset($_GET['account'])) {
+							echo '<input type="submit" class="send" value="Détruire le compte '.$_GET['account'].'" />';
+						}
+						else {
+							echo '<input type="submit" class="send" value="Détruire le compte" />';
+						}
+						?>
+					</p>
 
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>
@@ -230,15 +237,23 @@
 	<?php
 	}
 
+	/* 
+	Used only in admin.php
+	Return the list of all users in a <table>
+	*/
 	function usersTable($accountsFile = "users/accounts.csv", $imgDir = "img/") {
 		$result = '';
 		$result .= '<table>';
 
+		// Column names
 		$result .= '<tr><th>Username</th><th>Mail</th><th>User level</th><th>Signature</th><th colspan="2">Options</th></tr>';
 
+		// We open the file
 		if(($handle = fopen($accountsFile, "r")) !== false) {
+			// For each line
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
+					// We display the infos
 					$result .= '<tr><td class="usernameTD">'.$data[0].'</td><td class="mailTD">'.$data[2].'</td>';
 					$result .= '<td class="userlevelTD">'.$data[3].'</td><td class="signatureTD">'.$data[4].'</td>';
 					$result .= '<td class="img"><a href="users/'.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
@@ -249,9 +264,66 @@
 			fclose($handle);
 		}
 
+		// To add a new user
 		$result .= '<tr><td class="img" colspan="6" ><a href="admin.php#registerModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
 		$result .= '</table>';
 
 		return $result;
+	}
+
+	/*
+	Initialize the database (creates it if not existing & create the tables)
+	Parameters are the ones used to connect to the database
+	*/
+	function initDB($servername, $username, $password, $dbname) {
+		$linkDB = mysqli_connect($servername, $username, $password);
+		$query = mysqli_query($linkDB, "CREATE DATABASE IF NOT EXISTS `".$dbname."`");
+		mysqli_close($linkDB);
+
+		$linkDB = mysqli_connect($servername, $username, $password, $dbname);
+		$query = mysqli_query($linkDB,
+			"CREATE TABLE IF NOT EXISTS `post` (
+				`id` int NOT NULL AUTO_INCREMENT,
+				`link` varchar(767) NOT NULL,
+				`description` varchar(767),
+				`author` varchar(32) NOT NULL,
+				`avgMark` float(2),
+				`cat_html` boolean DEFAULT FALSE,
+				`cat_css` boolean DEFAULT FALSE,
+				`cat_php` boolean DEFAULT FALSE,
+				`cat_sql` boolean DEFAULT FALSE,
+				`date` timestamp NOT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		$query = mysqli_query($linkDB,
+			"CREATE TABLE IF NOT EXISTS `mark` (
+				`score` float(2) NOT NULL,
+				`author` varchar(32) NOT NULL,
+				`date` timestamp NOT NULL,
+				`id` int NOT NULL,
+				PRIMARY KEY (`score`, `author`),
+				KEY `id` (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		$query = mysqli_query($linkDB,
+			"ALTER TABLE `mark`
+				ADD CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`id`) REFERENCES `post` (`id`);");
+
+		$query = mysqli_query($linkDB,
+			"CREATE TABLE IF NOT EXISTS `comment` (
+				`comment` varchar(767) NOT NULL,
+				`author` varchar(32) NOT NULL,
+				`date` timestamp NOT NULL,
+				`id` int NOT NULL,
+				PRIMARY KEY (`comment`, `author`),
+				KEY `id` (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		$query = mysqli_query($linkDB,
+			"ALTER TABLE `mark`
+				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`id`) REFERENCES `post` (`id`);");
+
+		mysqli_close($linkDB);
 	}
 ?>

@@ -3,6 +3,7 @@
 	include('util.inc.php');
 	beginHTML('Golb','../css/styles.css');
 
+	// If all the infos have been sent
 	if(isset($_POST["usernameSignup"]) && isset($_POST["passwordSignup1"]) && isset($_POST["passwordSignup2"]) && isset($_POST["emailSignup"])) {
 		$register = true;
 		$error = "";
@@ -40,13 +41,16 @@
 			$error .= "5";
 		}
 
+		// We open the file
 		if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
+					// If the username is already used
 					if($data[0] == $_POST["usernameSignup"]) {
 						$register = false;
 						$error .= "1";
 					}
+					// If the mail is already used
 					if($data[2] == $mail) {
 						$register = false;
 						$error .= "3";
@@ -56,13 +60,17 @@
 			fclose($handle);
 		}
 
+		// If we are allowed to register
 		if($register) {
+			// We create the array containing the new user's infos (username, password, e-mail, user access, signature)
 			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 2, "");
 
+			// We open the file and add the user to it
 			$file = fopen("../users/accounts.csv", "a");
 			fputcsv($file, $newUser, ":");
 			fclose($file);
 
+			// We create his own directory for his profile page
 			$userDir = "../users/".strtolower($_POST["usernameSignup"]);
 			mkdir($userDir);
 
@@ -72,6 +80,7 @@
 
 			copy("../users/usersIndex.php", $userDir."/index.php");
 
+			// Redirection
 			if(isset($_GET["page"])) {
 				header('Location: ../'.$_GET["page"]);
 			}
@@ -80,6 +89,7 @@
 			}
 		}
 
+		// If there has been errors
 		if($error != "") {
 			if(isset($_GET["page"])) {
 				header('Location: ../'.$_GET["page"].'?error='.$error.'#registerModal');
