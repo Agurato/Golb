@@ -45,7 +45,7 @@
 		</div>
 		<div id="content">
 			<?php
-				initDB("127.0.0.1", "root", "root", "golb");
+				$linkDB = initDB("127.0.0.1", "root", "root", "golb");
 			?>
 			<form method="post" action="index.php" class="selecter">
 					<div class="selecter">
@@ -61,6 +61,12 @@
 						<input type="submit" name="valider" value="Valider" id="valider"/>
 					</div>
 			</form>
+
+			<?php
+				echo getPosts($linkDB, "date");
+
+				mysqli_close($linkDB);
+			?>
 		</div>
 	</div>
 

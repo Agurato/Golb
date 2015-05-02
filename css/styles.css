@@ -10,15 +10,28 @@ h1 {
 	position: relative;
 }
 
-table, td, th {
+table#accountsList, tr.userHeader > th, tr.userData > td {
 	border: 1px solid black;
 	text-align: center;
 	border-collapse: collapse;
 }
 
-td.a {
-	border: none;
+table.post {
+	border: 1px solid black;
+	border-collapse: collapse;
 }
+
+tr.postInfos > th, tr.postInfos > td {
+	text-align: left;
+	border: 1px solid black;
+}
+
+/*tr.postInfos > th.postID, tr.postInfos > th.postTitle, tr.postInfos > td.postLink {
+	text-align: left;
+	float: left;
+	border: 1px solid black;
+	border-collapse: collapse;
+}*/
 
 .img-rounded {
 	border-radius:6px;

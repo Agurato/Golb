@@ -243,10 +243,11 @@
 	*/
 	function usersTable($accountsFile = "users/accounts.csv", $imgDir = "img/") {
 		$result = '';
-		$result .= '<table>';
+		$result .= '<table id="accountsList">';
 
 		// Column names
-		$result .= '<tr><th>Username</th><th>Mail</th><th>User level</th><th>Signature</th><th colspan="2">Options</th></tr>';
+		$result .= '<tr class="userHeader"><th>Username</th><th>Mail</th><th>User level</th>';
+		$result .= '<th>Signature</th><th colspan="2">Options</th></tr>';
 
 		// We open the file
 		if(($handle = fopen($accountsFile, "r")) !== false) {
@@ -254,10 +255,10 @@
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					// We display the infos
-					$result .= '<tr><td class="usernameTD">'.$data[0].'</td><td class="mailTD">'.$data[2].'</td>';
-					$result .= '<td class="userlevelTD">'.$data[3].'</td><td class="signatureTD">'.$data[4].'</td>';
-					$result .= '<td class="img"><a href="users/'.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
-					$result .= '<td class="img"><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
+					$result .= '<tr class="userData"><td>'.$data[0].'</td><td>'.$data[2].'</td>';
+					$result .= '<td>'.$data[3].'</td><td>'.$data[4].'</td>';
+					$result .= '<td><a href="users/'.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
+					$result .= '<td><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
 					$result .= '</tr>';
 				}
 			}
@@ -285,6 +286,7 @@
 			"CREATE TABLE IF NOT EXISTS `post` (
 				`id` int NOT NULL AUTO_INCREMENT,
 				`link` varchar(767) NOT NULL,
+				`title` varchar(767) NOT NULL,
 				`description` varchar(767),
 				`author` varchar(32) NOT NULL,
 				`avgMark` float(2),
@@ -324,6 +326,69 @@
 			"ALTER TABLE `mark`
 				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`id`) REFERENCES `post` (`id`);");
 
-		mysqli_close($linkDB);
+		$query = mysqli_query($linkDB,
+			"INSERT INTO `post` (`id`, `link`, `title`, `description`, `author`, `avgMark`, `cat_html`, `cat_css`, `cat_php`, `cat_sql`, `date`)
+			VALUES (1, 'http://stackoverflow.com', 'Stackoverflow', 'God himself', 'Vincent', 0.98, 1, 1, 1, 1, '2015-05-02 11:54:26'),
+			(2, 'http://php.net/manual/fr/index.php', 'PHP Manual', 'Le manuel de PHP', 'Lucas', 0.235, 0, 0, 1, 0, '2015-05-02 11:54:08');");
+
+		return $linkDB;
+	}
+
+	function getPosts($linkDB, $order) {
+		$tableResult = '';
+
+		$query = "SELECT * FROM `post` ORDER BY `id` DESC LIMIT 25";
+		$result = mysqli_query($linkDB, $query);
+
+		$tableResult .= '<table id="postList">';
+
+		for($i=mysqli_num_rows($result)-1 ; $i>=0 ; $i--) {
+			$tableResult .= '<tr><td><table class="post">';
+
+			$row = mysqli_fetch_row($result);
+			$keys = array('id', 'link', 'title', 'description', 'author', 'avgMark', 'cat1', 'cat2', 'cat3', 'cat4', 'date');
+			$values = array_combine($keys, $row);
+
+			$categories = '';
+			$catArray = array(1 => 'HTML', 'CSS', 'PHP', 'SQL');
+			for($j=1 ; $j<=4 ; $j++) {
+				if($values["cat".$j] == 1) {
+					if(strlen($categories) > 0) {
+						$categories .= ' / ';
+					}
+					$categories .= $catArray[$j];
+				}
+			}
+
+			$tableResult .= '<tr class="postInfos"><th class="postID">#'.$values["id"].'</th><th class="postTitle" colspan="5">'.$values["title"].'</th></tr>';
+			$tableResult .= '<tr class="postInfos"><td class="postLink" colspan="6"><a href="'.$values["link"].'"><img src="img/urlLink.png" alt="url" height="15" /> '.$values["link"].'</a></td></tr>';
+			$tableResult .= '<tr class="postInfos"><td class="postDesc" colspan="6">'.$values["description"].'<hr />'.$_SESSION["signature"].'</td></tr>';
+			$tableResult .= '<tr class="postInfos"><td class="postAuthor" colspan="2">By : '.$values["author"].'</td><th class="postCat" colspan="4">'.$categories.'</th></tr>';
+			$tableResult .= '<tr class="postInfos"><td class="postDate" colspan="2">'.$values["date"].'</td><td colspan="4">';
+
+			$starNumber = round($values["avgMark"]) / 2;
+			$starCount = 0;
+			for($j=1 ; $j<=$starNumber ; $j++) {
+				$tableResult .= '<img src="img/star_full.png" alt="star'.$j.'" height="15" />';
+				$starCount ++;
+			}
+			if(floor($starNumber) != $starNumber) {
+				$tableResult .= '<img src="img/star_half.png" alt="star'.($j-0.5).'" height="15" />';
+				$starCount ++;
+			}
+			for($j=$starCount ; $j<5 ; $j++) {
+				$tableResult .= '<img src="img/star_empty.png" alt="star'.$j.'" height="15" />';
+				$starCount ++;
+			}
+
+			$tableResult .= ' Stars : '.$starCount;
+			$tableResult .= '</td></tr>';
+
+			$tableResult .= '</table></td></tr>';
+		}
+
+		$tableResult .= '</table>';
+
+		return $tableResult;
 	}
 ?>
