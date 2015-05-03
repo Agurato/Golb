@@ -79,6 +79,7 @@
 			fclose($file);
 
 			copy("../users/usersIndex.php", $userDir."/index.php");
+			copy("../img/user.png", $userDir."/profilePic.png");
 
 			// Redirection
 			if(isset($_GET["page"])) {

@@ -19,23 +19,56 @@ table#accountsList, tr.userHeader > th, tr.userData > td {
 table.post {
 	border: 1px solid black;
 	border-collapse: collapse;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
 }
 
 tr.postInfos > th, tr.postInfos > td {
 	text-align: left;
 	border: 1px solid black;
+	padding-left: 5px;
 }
 
-/*tr.postInfos > th.postID, tr.postInfos > th.postTitle, tr.postInfos > td.postLink {
-	text-align: left;
-	float: left;
-	border: 1px solid black;
-	border-collapse: collapse;
-}*/
+tr.postInfos > th.postID {
+	width: 0px;
+	padding-right: 5px;
+	vertical-align: center;
+}
+
+tr.postInfos > td.postStar {
+	text-align: center;
+	width: 180px;
+}
+
+tr.postInfos > th.postTitle {
+	border: none;
+	vertical-align: center;
+}
+
+tr.postInfos > td.postAuthor {
+	vertical-align: top;
+	width: 130px;
+	padding: 5px;
+}
+
+span.postAuthorName {
+	font-weight: bold;
+}
+
+span.postDate {
+	font-size: 9pt;
+}
+
+a.commentPost {
+	float: right;
+	padding-right: 10px;
+}
 
 .img-rounded {
 	border-radius:6px;
-}
 }
 
 .img-centered {
@@ -54,7 +87,7 @@ div.titles {
 }
 
 /* Contains the title and the modal windows */
-#header{
+#header {
 	text-align: center;
 	position: relative;
 }
@@ -195,26 +228,39 @@ p.loginForm > input.send {
 }
 
 /* Labels of the register form */
-p.registerForm > label {
+p.generalForm > label {
 	color: #c0392b;
 	text-align: left;
 }
 
 /* Inputs of the register form */
-p.registerForm > input {
-	color: white;	
+p.generalForm > input {
+	color: white;
 	background-color: #2c3e50;
 	width: 430px;
 	text-align: left;
 }
 
 /* "Register" button of the register form */
-p.registerForm > input.send {
+p.generalForm > input.send {
 	width: 435px;
 	height: 50px;
 	margin-top: 10px;
 	text-align: center;
 	border-radius: 6px;
+}
+
+p.generalForm > input.postCategory {
+	width: 0px;
+}
+
+p.generalForm > textarea {
+	max-width: 430px;
+	min-width: 430px;
+	max-height: 60px;
+	min-height: 60px;
+	color: white;
+	background-color: #2c3e50;
 }
 
 form {
@@ -244,7 +290,7 @@ form {
 	width: 450px;
 	position: relative;
 	margin: auto;
-	margin-top: 6%;
+	margin-top: 2%;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
 	background: #233140;

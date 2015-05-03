@@ -1,6 +1,7 @@
 <?php
 	include_once('utils/begin.php');
 	include_once('utils/util.inc.php');
+	include_once('utils/forms.inc.php');
 	beginHTML('Golb','css/styles.css');
 	beginSession();
 ?>

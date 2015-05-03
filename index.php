@@ -1,6 +1,7 @@
 <?php
 	include_once('utils/begin.php');
 	include_once('utils/util.inc.php');
+	include_once('utils/forms.inc.php');
 	beginHTML('Golb','css/styles.css');
 	beginSession();
 ?>
@@ -9,8 +10,10 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
+			$connectionInfos = array("servername" => "127.0.0.1", "username" => "root", "password" => "root", "dbname" =>  "golb");
 			loginForm();
 			registerForm();
+			newPostForm($connectionInfos);
 		?>
 
 		<!-- Title & subtitle -->
@@ -45,11 +48,11 @@
 		</div>
 		<div id="content">
 			<?php
-				$linkDB = initDB("127.0.0.1", "root", "root", "golb");
+				$linkDB = initDB($connectionInfos["servername"], $connectionInfos["username"], $connectionInfos["password"], $connectionInfos["dbname"]);
 			?>
 			<form method="post" action="index.php" class="selecter">
 					<div class="selecter">
-						<select name="Selectioner une rubirque" id="rubrique">
+						<select name="Selectioner une rubrique" id="rubrique">
 							<option value="Rubrique">Rubrique</option>
 							<option value="XHTML">XHTML</option>
 							<option value="CSS">CSS</option>
@@ -63,6 +66,11 @@
 			</form>
 
 			<?php
+				if(!empty($_SESSION["login"])) {
+					echo '<a href="index.php#newPostModal">Nouveau post</a>';
+				} else {
+					echo '<a href="index.php#loginModal">Nouveau post</a>';
+				}
 				echo getPosts($linkDB, "date");
 
 				mysqli_close($linkDB);

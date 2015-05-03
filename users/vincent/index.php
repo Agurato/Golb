@@ -1,12 +1,16 @@
 <?php
 	include_once('../../utils/begin.php');
 	include_once('../../utils/util.inc.php');
+	include_once('../../utils/forms.inc.php');
 	beginHTML('Golb','../../css/styles.css');
 	beginSession();
 ?>
 	<!-- HEADER -->
 	<div id="header">
 		<?php
+			if($_SESSION["login"] == null) {
+				header('Location: ../../index.php');
+			}
 			// $dirname is the array which contains the names of the directories in the path
 			$dirname = explode("/", getcwd());
 			// The login form is login.php (at the root of the project) and we want to redirect to this page once logged in
@@ -58,7 +62,7 @@
 					$currentUser = fgetcsv($handle, 1000, ":");
 					fclose($handle);
 				}
-				echo '<p id="username">'.$currentUser[0].'</p>';
+				echo '<p id="username">'.$currentUser[0].'<img src="profilePic.png" alt="profilePic" height="100"/></p>';
 			?>
 			<form method="post" action="profileChange.php">
 				<p class="profileForm">
@@ -66,7 +70,7 @@
 					<input type="text" name="email" id="email" 
 					<?php
 						if(!empty($_SESSION['login'])) {
-							if(strtolower($_SESSION['login']) == strtolower($currentUser[0])) {
+							if((strtolower($_SESSION['login']) == strtolower($currentUser[0])) || $_SESSION["userLevel"] == 2) {
 								echo 'value="'.$currentUser[2].'"';
 							}
 						}

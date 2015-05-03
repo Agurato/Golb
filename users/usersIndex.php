@@ -1,6 +1,7 @@
 <?php
 	include_once('../../utils/begin.php');
 	include_once('../../utils/util.inc.php');
+	include_once('../../utils/forms.inc.php');
 	beginHTML('Golb','../../css/styles.css');
 	beginSession();
 ?>
@@ -61,7 +62,7 @@
 					$currentUser = fgetcsv($handle, 1000, ":");
 					fclose($handle);
 				}
-				echo '<p id="username">'.$currentUser[0].'</p>';
+				echo '<p id="username">'.$currentUser[0].'<img src="profilePic.png" alt="profilePic" height="100"/></p>';
 			?>
 			<form method="post" action="profileChange.php">
 				<p class="profileForm">
