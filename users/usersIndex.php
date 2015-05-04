@@ -36,21 +36,21 @@
 	<div id="contentmain">
 		<div id="menu">
 			<ul class="topmenu">
-				<li class="leftAlign"><a href="../../index.php">Accueil</a></li>
-				<li class="leftAlign"><a href="../../index.php">News</a></li>
-				<li class="leftAlign"><a href="../../index.php">Messages</a></li>
+				<a href="../../index.php"><li class="leftAlign">Accueil</li></a>
+				<a href="../../index.php"><li class="leftAlign">News</li></a>
+				<a href="../../index.php"><li class="leftAlign">Messages</li></a>
 				<?php
 				if(!empty($_SESSION['login'])){
-					echo '<li class="rightAlign logoutLink"><a href="../../utils/disconnect.php?page=users/'.$dirname[count($dirname)-1].'">Se déconnecter</a></li>';
-					echo '<li class="rightAlign loginLink"><a href="../'.strtolower($_SESSION['login']).'">'.$_SESSION['login'].'</a></li>';
+					echo '<a href="../../utils/disconnect.php?page=users/'.$dirname[count($dirname)-1].'"><li class="rightAlign logoutLink">Se déconnecter</li></a>';
+					echo '<a href="../'.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
 					if($_SESSION["userLevel"] == 2) {
-						echo '<li class="rightAlign adminLink"><a href="../../admin.php">Administration</a></li>';
+						echo '<a href="../../admin.php"><li class="rightAlign adminLink">Administration</li>';
 					}
 
 				}
 				else{
-					echo '<li class="rightAlign"><a href="index.php#registerModal">S\'inscrire</a></li>';
-					echo '<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>';
+					echo '<a href="index.php#registerModal"><li class="rightAlign">S\'inscrire</li></a>';
+					echo '<a href="index.php#loginModal"><li class="rightAlign">Se connecter</li></a>';
 				}
 				?>
 			</ul>

@@ -48,7 +48,7 @@ div.titles {
 
 .content{
 	border: solid;
-	border-color: #233140;
+	border-color: #11181f;
 	top: 50%;
 	left: 50%;
 	margin-left: -500px;
@@ -64,24 +64,39 @@ div.titles {
 	background-color: #233140;
 	position: absolute;
 	width: 100%;
+	height:3.5%;
 }
 
 .topmenu{
 	margin:0;
 	padding:0;
 	list-style: none;
+	height:100%;
 }
 
 /* Aligns manu items on the left */
 li.leftAlign {
 	float: left;
-	margin: 8px;
+	height: 100%;
+	width:15%;
+}
+
+/* Hover for menu items */
+div.menu li.leftAlign:hover, li.rightAlign:hover{
+	background-color: #11181f;
+}
+
+li.login{
+	float:right;
+	height:100%;
+	width:15%;
 }
 
 /* Aligns manu items on the right */
 li.rightAlign {
 	float: right;
-	margin: 8px;
+	height:100%;
+	width:15%;
 }
 
 /* Background when menu items are hovered */
@@ -100,6 +115,8 @@ div.info {
 a {
 	text-decoration: none;
 	color:#7f8c8d;
+	height:100%;
+	width:80%;
 }
 
 h1 > a {

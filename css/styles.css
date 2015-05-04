@@ -95,7 +95,7 @@ div.titles {
 #contentmain {
 	height: 100%;
 	border: solid;
-	border-color: #233140;
+	border-color: #11181f;
 	top: 50%;
 	left: 50%;
 	margin-left: -500px;
@@ -117,41 +117,36 @@ div.titles {
 	background-color: #233140;
 	position: absolute;
 	width: 100%;
+	height:3.5%;
 }
 
 .topmenu{
 	margin:0;
 	padding:0;
 	list-style: none;
+	height:100%;
 }
 
 #content{
 	margin-top: 40px;
 }
 
+div.menu li.leftAlign:hover, li.rightAlign:hover{
+	background-color: #11181f;
+}
+
 /* Aligns manu items on the left */
 li.leftAlign {
 	float: left;
-	margin: 8px;
+	height:100%;
+	width:15%;
 }
 
 /* Aligns manu items on the right */
 li.rightAlign {
 	float: right;
-	margin: 8px;
-}
-
-/* Background when menu items are hovered */
-div.menu a:hover {
-	background-color: #11181f;
-}
-
-div.info {
-	text-align: left;
-	position: absolute;
-	width: 100%;
-	height: 957px;
-	margin-top: 43px;
+	height:100%;
+	width:15%;
 }
 
 a {
@@ -164,17 +159,17 @@ h1 > a {
 	position: relative;
 }
 
-li.loginLink > a {
+li.loginLink  {
 	color: #c0392b;
 	font-weight: bold;
 }
 
-li.adminLink > a {
+li.adminLink  {
 	color: #84EB74;
 	font-weight: bold;
 }
 
-li.logoutLink > a {
+li.logoutLink {
 	color: #D9D06E;
 }
 
