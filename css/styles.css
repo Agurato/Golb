@@ -10,12 +10,37 @@ h1 {
 	position: relative;
 }
 
-table#accountsList, tr.userHeader > th, tr.userData > td {
+/* List of accounts in admin.php */
+table#accountsList {
 	border: 1px solid black;
-	text-align: center;
 	border-collapse: collapse;
+	margin-bottom: 30px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
 }
 
+tr.userHeader > th {
+	border: 1px solid black;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+tr.userData > td {
+	border: 1px solid black;
+}
+
+tr > td.userOption {
+	padding-top: 5px;
+}
+
+tr > td.addUser {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+/* List of posts in index.php */
 table.post {
 	border: 1px solid black;
 	border-collapse: collapse;
@@ -131,22 +156,27 @@ div.titles {
 	margin-top: 40px;
 }
 
-div.menu li.leftAlign:hover, li.rightAlign:hover{
+li.leftAlign:hover, li.rightAlign:hover{
 	background-color: #11181f;
+	height: 30px;
 }
 
-/* Aligns manu items on the left */
-li.leftAlign {
+
+
+/* Aligns menu items on the left */
+a > li.leftAlign {
 	float: left;
-	height:100%;
-	width:15%;
+	height: 100%;
+	width: 15%;
+	padding-top: 5px;
 }
 
-/* Aligns manu items on the right */
-li.rightAlign {
+/* Aligns menu items on the right */
+a > li.rightAlign {
 	float: right;
 	height:100%;
 	width:15%;
+	padding-top: 5px;
 }
 
 a {

@@ -33,8 +33,8 @@
 				<?php
 				if(!empty($_SESSION['login'])){
 					echo '<a href="utils/disconnect.php?page=index.php"><li class="rightAlign logoutLink">Se déconnecter</li></a>';
-					echo '<a href="users/'.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
-					if($_SESSION["userLevel"] == "2") {
+					echo '<a href="users/user.php?name='.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
+					if($_SESSION["userLevel"] == 3) {
 						echo '<a href="admin.php"><li class="rightAlign adminLink">Administration</li></a>';
 					}
 
@@ -66,10 +66,14 @@
 			</form>
 
 			<?php
-				if(!empty($_SESSION["login"])) {
+				if(!empty($_SESSION["login"]) && $_SESSION["userLevel"] > 1) {
 					echo '<a href="index.php#newPostModal">Nouveau post</a>';
-				} else {
+				}
+				else if(empty($_SESSION["login"])) {
 					echo '<a href="index.php#loginModal">Nouveau post</a>';
+				}
+				else {
+					echo '<p>Votre inscription est en cours</p>';
 				}
 				echo getPosts($linkDB, "date");
 

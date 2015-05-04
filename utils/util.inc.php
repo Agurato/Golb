@@ -10,7 +10,7 @@
 
 		// Column names
 		$result .= '<tr class="userHeader"><th>Username</th><th>Mail</th><th>User level</th>';
-		$result .= '<th>Signature</th><th colspan="2">Options</th></tr>';
+		$result .= '<th>Signature</th><th colspan="4">Options</th></tr>';
 
 		// We open the file
 		if(($handle = fopen($accountsFile, "r")) !== false) {
@@ -19,9 +19,22 @@
 				if(count($data) == 5) {
 					// We display the infos
 					$result .= '<tr class="userData"><td>'.$data[0].'</td><td>'.$data[2].'</td>';
-					$result .= '<td>'.$data[3].'</td><td>'.$data[4].'</td>';
-					$result .= '<td><a href="users/'.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
-					$result .= '<td><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
+					$result .= '<td>'.$data[3].'</td><td>'.$data[4].'</td><td class="userOption">';
+					if($data[3]>=2) {
+						$result .= '<img src="'.$imgDir.'check.png" alt="checkLevel2" height="25" />';
+					}
+					else {
+						$result .= '<a href="utils/updateLevel.php?user='.$data[0].'&amp;level=2"><img src="'.$imgDir.'check_empty.png" alt="checkLevel2" height="25" /></a>';
+					}
+					$result .= '</td><td class="userOption">';
+					if($data[3]>=3) {
+						$result .= '<img src="'.$imgDir.'check.png" alt="checkLevel3" height="25" />';
+					}
+					else {
+						$result .= '<a href="utils/updateLevel.php?user='.$data[0].'&amp;level=3"><img src="'.$imgDir.'check_empty.png" alt="checkLevel2" height="25" /></a>';
+					}
+					$result .= '</td><td class="userOption"><a href="users/user.php?name='.strtolower($data[0]).'"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
+					$result .= '<td class="userOption"><a href="admin.php?account='.$data[0].'#delAccountModal"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
 					$result .= '</tr>';
 				}
 			}
@@ -29,7 +42,7 @@
 		}
 
 		// To add a new user
-		$result .= '<tr><td class="img" colspan="6" ><a href="admin.php#registerModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
+		$result .= '<tr><td class="addUser" colspan="8" ><a href="admin.php#registerModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
 		$result .= '</table>';
 
 		return $result;
@@ -52,11 +65,7 @@
 				`title` varchar(767) NOT NULL,
 				`description` varchar(767),
 				`author` varchar(32) NOT NULL,
-				`avgMark` float(2),
-				`cat_html` boolean DEFAULT FALSE,
-				`cat_css` boolean DEFAULT FALSE,
-				`cat_php` boolean DEFAULT FALSE,
-				`cat_sql` boolean DEFAULT FALSE,
+				`cat` varchar(767) NOT NULL,
 				`date` timestamp NOT NULL,
 				PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
@@ -66,28 +75,28 @@
 				`score` int NOT NULL,
 				`author` varchar(32) NOT NULL,
 				`date` timestamp NOT NULL,
-				`id` int NOT NULL,
+				`postID` int NOT NULL,
 				PRIMARY KEY (`score`, `author`),
-				KEY `id` (`id`)
+				KEY `postID` (`postID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$query = mysqli_query($linkDB,
 			"ALTER TABLE `mark`
-				ADD CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`id`) REFERENCES `post` (`id`);");
+				ADD CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`postID`) REFERENCES `post` (`id`);");
 
 		$query = mysqli_query($linkDB,
 			"CREATE TABLE IF NOT EXISTS `comment` (
 				`comment` varchar(767) NOT NULL,
 				`author` varchar(32) NOT NULL,
 				`date` timestamp NOT NULL,
-				`id` int NOT NULL,
+				`postID` int NOT NULL,
 				PRIMARY KEY (`comment`, `author`),
-				KEY `id` (`id`)
+				KEY `postID` (`postID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$query = mysqli_query($linkDB,
 			"ALTER TABLE `mark`
-				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`id`) REFERENCES `post` (`id`);");
+				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`postID`) REFERENCES `post` (`id`);");
 
 		return $linkDB;
 	}
@@ -100,27 +109,28 @@
 
 
 		for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
-			$tableResult .= '<table class="post">';
 
-			$row = mysqli_fetch_row($result);
-			$keys = array('id', 'link', 'title', 'description', 'author', 'avgMark', 'cat1', 'cat2', 'cat3', 'cat4', 'date');
-			$values = array_combine($keys, $row);
+			$values = mysqli_fetch_assoc($result);
 
-			$categories = '';
-			$catArray = array(1 => 'HTML', 'CSS', 'PHP', 'SQL');
-			for($j=1 ; $j<=4 ; $j++) {
-				if($values["cat".$j] == 1) {
-					if(strlen($categories) > 0) {
-						$categories .= ' / ';
-					}
-					$categories .= $catArray[$j];
-				}
-			}
+			$categories = str_replace('/', ' / ', $values["cat"]);
 
 			$commentNumber = 0;
-			$commentQuery = "SELECT * FROM `comment` WHERE `id` = ".$values["id"].";";
+			$commentQuery = "SELECT * FROM `comment` WHERE `postID` = ".$values["id"].";";
 			$commentResult = mysqli_query($linkDB, $commentQuery);
 			$commentNumber = mysqli_num_rows($commentResult);
+
+			$sumMark = 0;
+			$markNumber = 0;
+			$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$values["id"].";";
+			$markResult = mysqli_query($linkDB, $markQuery);
+			$markNumber = mysqli_num_rows($markResult);
+
+			for($j=0 ; $j<$markNumber ; $j++) {
+				$marks = mysqli_fetch_assoc($markResult);
+				$sumMark += $marks["score"];
+			}
+
+			$tableResult .= '<table class="post">'."\n";
 
 			$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$values["author"].'</span><br />';
 			$tableResult .= '<span class="postDate">'.$values["date"].'</span><br /><img src="img/user.png" alt="user" height="80" /></td></tr>'."\n";
@@ -144,13 +154,13 @@
 				$tableResult .= '<td class="postStar">';
 			}
 
-			if($values["avgMark"] == "") {
+			if($markNumber == 0) {
 				for($j=1 ; $j<6 ; $j++) {
 					$tableResult .= '<img src="img/star_cross.png" alt="star'.$j.'" height="15" />';
 				}
 			}
 			else {
-				$starNumber = round($values["avgMark"]) / 2;
+				$starNumber = round($sumMark/$markNumber) / 2;
 				$starCount = 0;
 				for($j=1 ; $j<=$starNumber ; $j++) {
 					$tableResult .= '<img src="img/star_full.png" alt="star'.$j.'" height="15" />';
@@ -169,7 +179,7 @@
 			if(! empty($_SESSION["login"])) {
 				$tableResult .= ' / <a href="index.php#changeScore" class="postUserMark">';
 
-				$markQuery = "SELECT * FROM `mark` WHERE `id` = ".$values["id"].";";
+				$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$values["id"].";";
 				$markResult = mysqli_query($linkDB, $markQuery);
 				$markExists = false;
 

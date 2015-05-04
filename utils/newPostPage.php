@@ -22,35 +22,44 @@
 	}
 
 	if($newPost) {
-		echo "Tout est ok !<br />";
 		$linkDB = mysqli_connect($_GET["server"], $_GET["user"], $_GET["pw"], $_GET["db"]);
 
-		$insertQuery = 
-		'INSERT INTO `post` (`link`, `title`, `description`, `author`, `cat_html`, `cat_css`, `cat_php`, `cat_sql`)
-			VALUES ("'.$_POST["postLink"].'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'", ';
+		$url = $_POST["postLink"];
+		if(strpos($url, "://") !== false) {
+			// $url = "http://".$url;
+		}
 
+		$insertQuery = 
+		'INSERT INTO `post` (`link`, `title`, `description`, `author`, `cat`)
+			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'", "';
+
+		$count = 0;
 		if(in_array("html", $_POST["postCat"])) {
-			$insertQuery .= '1, ';
-		} else {
-			$insertQuery .= '0, ';
+			$insertQuery .= 'HTML';
+			$count ++;
 		}
 		if(in_array("css", $_POST["postCat"])) {
-			$insertQuery .= '1, ';
-		} else {
-			$insertQuery .= '0, ';
+			if($count > 0) {
+				$insertQuery .= '/';
+			}
+			$insertQuery .= 'CSS';
+			$count ++;
 		}
 		if(in_array("php", $_POST["postCat"])) {
-			$insertQuery .= '1, ';
-		} else {
-			$insertQuery .= '0, ';
+			if($count > 0) {
+				$insertQuery .= '/';
+			}
+			$insertQuery .= 'PHP';
+			$count ++;
 		}
 		if(in_array("sql", $_POST["postCat"])) {
-			$insertQuery .= '1';
-		} else {
-			$insertQuery .= '0';
+			if($count > 0) {
+				$insertQuery .= '/';
+			}
+			$insertQuery .= 'SQL';
 		}
 
-		$insertQuery .= ')';
+		$insertQuery .= '")';
 
 		echo $insertQuery;
 		mysqli_query($linkDB, $insertQuery);

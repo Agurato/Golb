@@ -36,8 +36,6 @@
 
 				// We re-write in the file the changed array
 				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
-				// We delete the suer directory
-				rmdir_recursive("../users/".strtolower($_SESSION["login"]));
 				// He is disconnected
 				header('Location: disconnect.php');
 			}
@@ -46,19 +44,6 @@
 		if($error != "") {
 			header('Location: ../users/'.strtolower($_SESSION["login"]).'?error='.$error.'#delAccountModal');
 		}
-	}
-
-	function rmdir_recursive($dir) {
-		$filesList = array_diff(scandir($dir), array('.', '..'));
-		foreach ($filesList as $file) {
-			if(is_dir($dir."/".$file)) {
-				rmdir_recursive($dir."/".$file);
-			}
-			else {
-				unlink($dir."/".$file);
-			}
-		}
-		rmdir($dir);
 	}
 
 	endHTML();

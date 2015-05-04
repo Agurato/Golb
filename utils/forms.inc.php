@@ -37,6 +37,7 @@
 					</div>
 					<p class="loginForm">
 						<a href="index.php#passwordLost" style="font-size:10pt">Mot de passe perdu ?</a><br />
+						<a href="index.php#registerModal" style="font-size:10pt">Pas de compte ? Inscrivez-vous</a><br />
 					</p>
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>
@@ -184,7 +185,6 @@
 				<?php
 					if(isset($_GET["error"])) {
 						$error = $_GET["error"];
-						$count = 0;
 						if($error != "") {
 							echo "<p>";
 							if(strpos($error, "1") !== false) {

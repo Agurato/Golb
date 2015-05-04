@@ -9,12 +9,31 @@
 	$lineToEdit = 0;
 	$error = "";
 
+	// If you are not allowed, redirection
+	if($_SESSION["userLevel"] < 3) {
+		header('Location: ../index.php');
+	}
+
 	// If the password and the account name are there
 	if(isset($_POST["passwordDelete"]) && isset($_GET["account"])) {
+
+		// We check the admin password
+		if(($adminFile = fopen("../users/accounts.csv", "r")) !== false) {
+			while(($admin = fgetcsv($adminFile, 1000, ":")) !== false) {
+				if(strtolower($admin[0]) == strtolower($_SESSION["login"])) {
+					if(! password_verify($_POST["passwordDelete"], $admin[1])) {
+						$delete = false;
+						$error .= "1";
+					}
+				}
+			}
+			fclose($adminFile);
+		}
 
 		// The admin can't delete his own account with the administration page
 		if(strtolower($_SESSION["login"]) == strtolower($_GET["account"])) {
 			$delete = false;
+			$error .= "2";
 		}
 
 		// We open the list of account
@@ -22,16 +41,6 @@
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				// We get the line corresponding to the name account send with $_GET
 				if(strtolower($data[0]) == strtolower($_GET["account"])) {
-					// We check the admin password
-					if(($adminFile = fopen("../users/".strtolower($_SESSION['login'])."/.userAccount.csv", "r")) !== false) {
-						if(($admin = fgetcsv($adminFile, 1000, ":")) !== false) {
-							if(! password_verify($_POST["passwordDelete"], $admin[1])) {
-								$delete = false;
-								$error .= "1";
-							}
-						}
-						fclose($adminFile);
-					}
 					
 					// We save the line number in accounts.csv corresponding to the account to delete
 					$lineToEdit = $lineCounter;
@@ -50,8 +59,6 @@
 
 				// We re-write the "accounts.csv" file
 				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
-				// We delete the profile page of the user
-				rmdir_recursive("../users/".strtolower($_GET["account"]));
 				// Redirection
 				header('Location: ../admin.php');
 			}
@@ -63,20 +70,6 @@
 		}
 
 		header('Location: ../admin.php');
-	}
-
-	// To delete the directory of the user (recursively)
-	function rmdir_recursive($dir) {
-		$filesList = array_diff(scandir($dir), array('.', '..'));
-		foreach ($filesList as $file) {
-			if(is_dir($dir."/".$file)) {
-				rmdir_recursive($dir."/".$file);
-			}
-			else {
-				unlink($dir."/".$file);
-			}
-		}
-		rmdir($dir);
 	}
 
 	endHTML();

@@ -32,8 +32,8 @@
 				<?php
 				if(!empty($_SESSION['login'])){
 					echo '<a href="utils/disconnect.php?page=index.php"><li class="rightAlign logoutLink">Se déconnecter</li></a>';
-					echo '<a href="users/'.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
-					if($_SESSION["userLevel"] == "2") {
+					echo '<a href="users/user.php?name='.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
+					if($_SESSION["userLevel"] == 3) {
 						echo '<a href="admin.php"><li class="rightAlign adminLink">Administration</li></a>';
 					}
 
@@ -48,7 +48,8 @@
 		<div id="content">
 			<?php
 				if(! empty($_SESSION['userLevel'])) {
-					if($_SESSION['userLevel'] == 2) {
+					if($_SESSION['userLevel'] == 3) {
+						echo '<p style="margin-top:50px;">Liste des utilisateurs du site</p>';
 						echo usersTable("users/accounts.csv", "img/");
 					}
 				}

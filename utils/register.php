@@ -46,12 +46,12 @@
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
 					// If the username is already used
-					if($data[0] == $_POST["usernameSignup"]) {
+					if(strtolower($data[0]) == strtolower($_POST["usernameSignup"])) {
 						$register = false;
 						$error .= "1";
 					}
 					// If the mail is already used
-					if($data[2] == $mail) {
+					if(strtolower($data[2]) == strtolower($mail)) {
 						$register = false;
 						$error .= "3";
 					}
@@ -63,7 +63,7 @@
 		// If we are allowed to register
 		if($register) {
 			// We create the array containing the new user's infos (username, password, e-mail, user access, signature)
-			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 2, "");
+			$newUser = array($_POST["usernameSignup"], password_hash($_POST["passwordSignup1"], PASSWORD_BCRYPT), $mail, 1, "");
 
 			// We open the file and add the user to it
 			$file = fopen("../users/accounts.csv", "a");
@@ -71,15 +71,15 @@
 			fclose($file);
 
 			// We create his own directory for his profile page
-			$userDir = "../users/".strtolower($_POST["usernameSignup"]);
-			mkdir($userDir);
+			// $userDir = "../users/".strtolower($_POST["usernameSignup"]);
+			// mkdir($userDir);
 
-			$file = fopen($userDir."/.userAccount.csv", "w");
-			fputcsv($file, $newUser, ":");
-			fclose($file);
+			// $file = fopen($userDir."/.userAccount.csv", "w");
+			// fputcsv($file, $newUser, ":");
+			// fclose($file);
 
-			copy("../users/usersIndex.php", $userDir."/index.php");
-			copy("../img/user.png", $userDir."/profilePic.png");
+			// copy("../users/usersIndex.php", $userDir."/index.php");
+			// copy("../img/user.png", $userDir."/profilePic.png");
 
 			// Redirection
 			if(isset($_GET["page"])) {
