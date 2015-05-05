@@ -91,7 +91,7 @@
 				`author` varchar(32) NOT NULL,
 				`date` timestamp NOT NULL,
 				`postID` int NOT NULL,
-				PRIMARY KEY (`commentID`),
+				PRIMARY KEY (`commentID`, `postID`),
 				KEY `postID` (`postID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
@@ -253,7 +253,7 @@
 			$tableResult .= '<span class="commentAuthorName">'.$comment["author"].'</span>';
 			$tableResult .= '<br /><span class="commentDate">'.$comment["date"].'</span></td></tr>';
 			$tableResult .= '<tr class="postComment"><th class="commentID">#'.$postID.'.'.$comment["commentID"].'</th><th><a href="#header">'.$post["title"].'</a></th></tr>';
-			$tableResult .= '<tr class="postComment"><td colspan="2">'.$comment["comment"].'</td></tr>';
+			$tableResult .= '<tr class="postComment"><td colspan="2">'.str_replace("\n", "<br />", $comment["comment"]).'</td></tr>';
 
 			$tableResult .= '</table>';
 		}
