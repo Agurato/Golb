@@ -10,6 +10,16 @@ h1 {
 	position: relative;
 }
 
+h1 > a {
+	color: #c0392b;
+	position: relative;
+}
+
+a {
+	text-decoration: none;
+	color:#7f8c8d;
+}
+
 /* List of accounts in admin.php */
 table#accountsList {
 	border: 1px solid black;
@@ -92,6 +102,47 @@ a.commentPost {
 	padding-right: 10px;
 }
 
+table.postComment {
+	border: 1px solid black;
+	border-collapse: collapse;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+
+tr.postComment > th, tr.postComment > td {
+	text-align: left;
+	border: 1px solid black;
+	padding-left: 5px;
+}
+
+tr.postComment > th.commentID {
+	width: 0px;
+	padding-right: 5px;
+	vertical-align: center;
+}
+
+tr.postComment > td.commentAuthor {
+	vertical-align: top;
+	width: 150px;
+	padding: 5px;
+}
+
+span.commentAuthorName {
+	font-weight: bold;
+}
+
+span.commentDate {
+	font-size: 9pt;
+}
+
+img.userPic {
+	float: left;
+	vertical-align: center;
+}
+
 .img-rounded {
 	border-radius:6px;
 }
@@ -156,15 +207,13 @@ div.titles {
 	margin-top: 40px;
 }
 
-li.leftAlign:hover, li.rightAlign:hover{
+li.leftAlign:hover > a, li.rightAlign:hover > a {
 	background-color: #11181f;
 	height: 30px;
 }
 
-
-
 /* Aligns menu items on the left */
-a > li.leftAlign {
+li.leftAlign > a {
 	float: left;
 	height: 100%;
 	width: 15%;
@@ -172,35 +221,29 @@ a > li.leftAlign {
 }
 
 /* Aligns menu items on the right */
-a > li.rightAlign {
+li.rightAlign > a {
 	float: right;
-	height:100%;
-	width:15%;
+	height: 100%;
+	width: 15%;
 	padding-top: 5px;
 }
 
-a {
-	text-decoration: none;
-	color:#7f8c8d;
-}
-
-h1 > a {
-	color: #c0392b;
-	position: relative;
-}
-
-li.loginLink  {
+li.loginLink > a {
 	color: #c0392b;
 	font-weight: bold;
 }
 
-li.adminLink  {
+li.adminLink > a {
 	color: #84EB74;
 	font-weight: bold;
 }
 
-li.logoutLink {
+li.logoutLink > a {
 	color: #D9D06E;
+}
+
+div#postDiv {
+	margin-top: 60px;
 }
 
 /* I DON'T KNOW WHAT THIS IS

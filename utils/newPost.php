@@ -26,7 +26,7 @@
 
 		$url = $_POST["postLink"];
 		if(strpos($url, "://") !== false) {
-			// $url = "http://".$url;
+			$url = "http://".$url;
 		}
 
 		$insertQuery = 

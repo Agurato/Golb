@@ -10,9 +10,15 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
+			if(empty($_GET["id"])) {
+				header('Location: index.php');
+			}
+
+			$connectionInfos = array("servername" => "127.0.0.1", "username" => "root", "password" => "root", "dbname" =>  "golb");
 			loginForm();
-			registerForm("utils/register.php?page=admin.php");
-			deleteAccountForm("utils/deleteAccountAdmin.php");
+			registerForm();
+			newPostForm($connectionInfos);
+			changeScore($connectionInfos);
 		?>
 
 		<!-- Title & subtitle -->
@@ -47,15 +53,11 @@
 		</div>
 		<div id="content">
 			<?php
-				if(! empty($_SESSION['userLevel'])) {
-					if($_SESSION['userLevel'] == 3) {
-						echo '<p style="margin-top:50px;">Liste des utilisateurs du site</p>';
-						echo usersTable("users/accounts.csv", "img/");
-					}
-				}
-				else {
-					header('Location: index.php');
-				}
+				$linkDB = initDB($connectionInfos["servername"], $connectionInfos["username"], $connectionInfos["password"], $connectionInfos["dbname"]);
+
+				echo getFullPost($linkDB, $_GET["id"]);
+
+				mysqli_close($linkDB);
 			?>
 		</div>
 	</div>
@@ -66,6 +68,7 @@
 			A website by Vincent Monot and Lucas Nicosia
 		</p>
 	</div>
+
 <?php
 	endHTML();
 ?>

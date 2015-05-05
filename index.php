@@ -14,6 +14,7 @@
 			loginForm();
 			registerForm();
 			newPostForm($connectionInfos);
+			changeScore($connectionInfos);
 		?>
 
 		<!-- Title & subtitle -->
@@ -27,21 +28,21 @@
 	<div id="contentmain">
 		<div id="menu">
 			<ul class="topmenu">
-				<a href="index.php"><li class="leftAlign">Accueil</li></a>
-				<a href="index.php"><li class="leftAlign">News</li></a>
-				<a href="index.php"><li class="leftAlign">Messages</li></a>
+				<li class="leftAlign"><a href="index.php">Accueil</a></li>
+				<li class="leftAlign"><a href="index.php">News</a></li>
+				<li class="leftAlign"><a href="index.php">Messages</a></li>
 				<?php
 				if(!empty($_SESSION['login'])){
-					echo '<a href="utils/disconnect.php?page=index.php"><li class="rightAlign logoutLink">Se déconnecter</li></a>';
-					echo '<a href="users/user.php?name='.strtolower($_SESSION['login']).'"><li class="rightAlign loginLink">'.$_SESSION['login'].'</li></a>';
+					echo '<li class="rightAlign logoutLink"><a href="utils/disconnect.php?page=index.php">Se déconnecter</a></li>';
+					echo '<li class="rightAlign loginLink"><a href="users/user.php?name='.strtolower($_SESSION['login']).'">'.$_SESSION['login'].'</a></li>';
 					if($_SESSION["userLevel"] == 3) {
-						echo '<a href="admin.php"><li class="rightAlign adminLink">Administration</li></a>';
+						echo '<li class="rightAlign adminLink"><a href="admin.php">Administration</a></li>';
 					}
 
 				}
 				else{
-					echo '<a href="index.php#registerModal"><li class="rightAlign">S\'inscrire</li></a>';
-					echo '<a href="index.php#loginModal"><li class="rightAlign">Se connecter</li></a>';
+					echo '<li class="rightAlign"><a href="index.php#registerModal">S\'inscrire</a></li>';
+					echo '<li class="rightAlign"><a href="index.php#loginModal">Se connecter</a></li>';
 				}
 				?>
 			</ul>

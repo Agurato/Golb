@@ -237,7 +237,7 @@
 	<?php
 	}
 
-	function newPostForm($connectionInfos, $newPostPage = "utils/newPostPage.php") {
+	function newPostForm($connectionInfos, $newPostPage = "utils/newPost.php") {
 	?>
 		<div id="newPostModal" class="modalDialog">
 			<div>
@@ -296,6 +296,112 @@
 					</p>
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>
+			</div>
+		</div>
+	<?php
+	}
+
+	function changeScore($connectionInfos, $scorePage = "utils/changeScore.php") {
+	?>
+		<div id="changeScoreModal" class="modalDialog">
+			<div>
+				<?php
+					if(isset($_GET["error"])) {
+						$error = $_GET["error"];
+						$count = 0;
+						if($error != "") {
+							echo "<p>";
+							if(strpos($error, "1") !== false) {
+								echo "Il faut rentrer un score";
+								$count ++;
+							}
+							if(strpos($error, "2") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "Le score doit être un nombre";
+								$count ++;
+							}
+							if(strpos($error, "3") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "ID du post manquant";
+								$count ++;
+							}
+							echo "</p>";
+						}
+					}
+
+					echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["postID"].'&amp;server='.$connectionInfos["servername"];
+					echo '&amp;user='.$connectionInfos["username"].'&amp;pw='.$connectionInfos["password"].'&amp;db='.$connectionInfos["dbname"].'">';
+				?>
+					<p class="loginForm">
+						Rentrez une note entre 0 et 10.
+					</p>
+
+					<div class="leftForm">
+						<p class="loginForm">
+							<label for="newScore" style="width:50px;">Note</label>
+							<input type="text" name="newScore" id="newScore" maxlength="4" style="width:250px;" />
+							<input type="submit" class="send" value="Noter" />
+						</p>
+					</div>
+				</form>
+				<a href="index.php" title="Close" class="close" >Fermer</a>
+			</div>
+		</div>
+	<?php
+	}
+
+	function addComment($connectionInfos, $scorePage = "utils/addComment.php") {
+	?>
+		<div id="commentPostModal" class="modalDialog">
+			<div>
+				<?php
+					if(isset($_GET["error"])) {
+						$error = $_GET["error"];
+						$count = 0;
+						if($error != "") {
+							echo "<p>";
+							if(strpos($error, "1") !== false) {
+								echo "Il faut rentrer un score";
+								$count ++;
+							}
+							if(strpos($error, "2") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "Le score doit être un nombre";
+								$count ++;
+							}
+							if(strpos($error, "3") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "ID du post manquant";
+								$count ++;
+							}
+							echo "</p>";
+						}
+					}
+
+					echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["postID"].'&amp;server='.$connectionInfos["servername"];
+					echo '&amp;user='.$connectionInfos["username"].'&amp;pw='.$connectionInfos["password"].'&amp;db='.$connectionInfos["dbname"].'">';
+				?>
+					<p class="loginForm">
+						Rentrez une note entre 0 et 10.
+					</p>
+
+					<div class="leftForm">
+						<p class="loginForm">
+							<label for="newScore" style="width:50px;">Note</label>
+							<input type="text" name="newScore" id="newScore" maxlength="4" style="width:250px;" />
+							<input type="submit" class="send" value="Noter" />
+						</p>
+					</div>
+				</form>
+				<a href="index.php" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php

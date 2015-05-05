@@ -76,7 +76,7 @@
 				`author` varchar(32) NOT NULL,
 				`date` timestamp NOT NULL,
 				`postID` int NOT NULL,
-				PRIMARY KEY (`score`, `author`),
+				PRIMARY KEY (`author`, `postID`),
 				KEY `postID` (`postID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
@@ -86,19 +86,131 @@
 
 		$query = mysqli_query($linkDB,
 			"CREATE TABLE IF NOT EXISTS `comment` (
+				`commentID` int NOT NULL UNIQUE AUTO_INCREMENT,
 				`comment` varchar(767) NOT NULL,
 				`author` varchar(32) NOT NULL,
 				`date` timestamp NOT NULL,
 				`postID` int NOT NULL,
-				PRIMARY KEY (`comment`, `author`),
+				PRIMARY KEY (`commentID`),
 				KEY `postID` (`postID`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$query = mysqli_query($linkDB,
-			"ALTER TABLE `mark`
+			"ALTER TABLE `comment`
 				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`postID`) REFERENCES `post` (`id`);");
 
 		return $linkDB;
+	}
+
+	function postInfos($linkDB, $postRow) {
+		$tableResult = '';
+
+		$categories = str_replace('/', ' / ', $postRow["cat"]);
+
+		$commentNumber = 0;
+		$commentQuery = "SELECT * FROM `comment` WHERE `postID` = ".$postRow["id"].";";
+		$commentResult = mysqli_query($linkDB, $commentQuery);
+		$commentNumber = mysqli_num_rows($commentResult);
+
+		$sumMark = 0;
+		$markNumber = 0;
+		$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$postRow["id"].";";
+		$markResult = mysqli_query($linkDB, $markQuery);
+		$markNumber = mysqli_num_rows($markResult);
+
+		for($j=0 ; $j<$markNumber ; $j++) {
+			$marks = mysqli_fetch_assoc($markResult);
+			$sumMark += $marks["score"];
+		}
+
+		$tableResult .= '<table class="post">'."\n";
+
+		$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$postRow["author"].'</span><br />';
+		$tableResult .= '<span class="postDate">'.$postRow["date"].'</span><br /><img src="img/user.png" alt="user" height="80" /></td></tr>'."\n";
+
+		$tableResult .= '<tr class="postInfos"><th class="postID">#'.$postRow["id"].'</th><th class="postTitle" colspan="5">'.$postRow["title"].'</th></tr>'."\n";
+
+		$tableResult .= '<tr class="postInfos"><td class="postLink" colspan="6">';
+		$tableResult .= '<a href="'.$postRow["link"].'"><img src="img/urlLink.png" alt="url" height="15" /> '.$postRow["link"].'</a></td></tr>'."\n";
+
+		$tableResult .= '<tr class="postInfos"><td class="postDesc" colspan="6">'.str_replace("\n", "<br />", $postRow["description"]).'<br /></td></tr>'."\n";
+
+		$tableResult .= '<tr class="postInfos"><td class="postCat" colspan="6">Catégorie(s) : <strong><em>'.$categories.'</em></strong></td></tr>'."\n";
+
+		$tableResult .= '<tr class="postInfos"><td class="postComments" colspan="5"><a href="post.php?id='.$postRow["id"].'">'.$commentNumber.' commentaire(s)';
+		$tableResult .= '<a href="post.php?id='.$postRow["id"].'#commentPostModal" class="commentPost">Commenter</a></td>';
+
+		if(empty($_SESSION["login"])) {
+			$tableResult .= '<td style="width:90px" class="postStar">';
+		}
+		if(! empty($_SESSION["login"])) {
+			$tableResult .= '<td class="postStar">';
+		}
+
+		if($markNumber == 0) {
+			for($j=1 ; $j<6 ; $j++) {
+				$tableResult .= '<img src="img/star_cross.png" alt="star'.$j.'" height="15" />';
+			}
+		}
+		else {
+			$starNumber = round($sumMark/$markNumber) / 2;
+			$starCount = 0;
+			for($j=1 ; $j<=$starNumber ; $j++) {
+				$tableResult .= '<img src="img/star_full.png" alt="star'.$j.'" height="15" />';
+				$starCount ++;
+			}
+			if(floor($starNumber) != $starNumber) {
+				$tableResult .= '<img src="img/star_half.png" alt="star'.($j-0.5).'" height="15" />';
+				$starCount ++;
+			}
+			for($j=$starCount ; $j<5 ; $j++) {
+				$tableResult .= '<img src="img/star_empty.png" alt="star'.$j.'" height="15" />';
+				$starCount ++;
+			}
+		}
+
+		if(! empty($_SESSION["login"])) {
+			$tableResult .= ' / <a href="index.php?postID='.$postRow["id"].'#changeScoreModal" class="postUserMark">';
+
+			$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$postRow["id"].";";
+			$markResult = mysqli_query($linkDB, $markQuery);
+			$markExists = false;
+
+			for($j=0 ; $j<mysqli_num_rows($markResult) && ! $markExists ; $j++) {
+				$marks = mysqli_fetch_assoc($markResult);
+				if(strtolower($marks["author"]) == strtolower($_SESSION["login"])) {
+					$markExists = true;
+				}
+			}
+			if($markExists) {
+				$starNumber = round($marks["score"]) / 2;
+				$starCount = 0;
+				for($j=1 ; $j<=$starNumber ; $j++) {
+					$tableResult .= '<img src="img/star_full_red.png" alt="star'.$j.'" height="15" />';
+					$starCount ++;
+				}
+				if(floor($starNumber) != $starNumber) {
+					$tableResult .= '<img src="img/star_half_red.png" alt="star'.($j-0.5).'" height="15" />';
+					$starCount ++;
+				}
+				for($j=$starCount ; $j<5 ; $j++) {
+					$tableResult .= '<img src="img/star_empty.png" alt="star'.$j.'" height="15" />';
+					$starCount ++;
+				}
+			}
+			else {
+				for($j=1 ; $j<6 ; $j++) {
+					$tableResult .= '<img src="img/star_cross_red.png" alt="star'.$j.'" height="15" />';
+				}
+			}
+			$tableResult .= '</a>';
+		}
+
+		$tableResult .= '</td></tr>'."\n";
+
+		$tableResult .= '</table>';
+
+		return $tableResult;
 	}
 
 	function getPosts($linkDB, $order) {
@@ -107,116 +219,46 @@
 		$query = "SELECT * FROM `post` ORDER BY `id` DESC LIMIT 20";
 		$result = mysqli_query($linkDB, $query);
 
-
 		for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
 
 			$values = mysqli_fetch_assoc($result);
+			$tableResult .= postInfos($linkDB, $values);
+			
+		}
 
-			$categories = str_replace('/', ' / ', $values["cat"]);
+		return $tableResult;
+	}
 
-			$commentNumber = 0;
-			$commentQuery = "SELECT * FROM `comment` WHERE `postID` = ".$values["id"].";";
-			$commentResult = mysqli_query($linkDB, $commentQuery);
-			$commentNumber = mysqli_num_rows($commentResult);
+	function getFullPost($linkDB, $postID) {
+		$tableResult = '';
 
-			$sumMark = 0;
-			$markNumber = 0;
-			$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$values["id"].";";
-			$markResult = mysqli_query($linkDB, $markQuery);
-			$markNumber = mysqli_num_rows($markResult);
+		$tableResult = '<div id="postDiv">';
 
-			for($j=0 ; $j<$markNumber ; $j++) {
-				$marks = mysqli_fetch_assoc($markResult);
-				$sumMark += $marks["score"];
-			}
+		$postQuery = 'SELECT * FROM `post` WHERE `id`='.$postID;
+		$postResult = mysqli_query($linkDB, $postQuery);
+		$post = mysqli_fetch_assoc($postResult);
+		$tableResult .= postInfos($linkDB, $post);
 
-			$tableResult .= '<table class="post">'."\n";
+		$commentQuery = 'SELECT * FROM `comment` WHERE `postID`='.$postID;
+		$commentResult = mysqli_query($linkDB, $commentQuery);
 
-			$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$values["author"].'</span><br />';
-			$tableResult .= '<span class="postDate">'.$values["date"].'</span><br /><img src="img/user.png" alt="user" height="80" /></td></tr>'."\n";
+		$tableResult .= '</div><div id="commentDiv">';
 
-			$tableResult .= '<tr class="postInfos"><th class="postID">#'.$values["id"].'</th><th class="postTitle" colspan="5">'.$values["title"].'</th></tr>'."\n";
+		for($i=0 ; $i<mysqli_num_rows($commentResult) ; $i++) {
+			$comment = mysqli_fetch_assoc($commentResult);
 
-			$tableResult .= '<tr class="postInfos"><td class="postLink" colspan="6">';
-			$tableResult .= '<a href="'.$values["link"].'"><img src="img/urlLink.png" alt="url" height="15" /> '.$values["link"].'</a></td></tr>'."\n";
+			$tableResult .= '<table class="postComment">';
 
-			$tableResult .= '<tr class="postInfos"><td class="postDesc" colspan="6">'.str_replace("\n", "<br />", $values["description"]).'<br /></td></tr>'."\n";
-
-			$tableResult .= '<tr class="postInfos"><td class="postCat" colspan="6">Catégorie(s) : <strong><em>'.$categories.'</em></strong></td></tr>'."\n";
-
-			$tableResult .= '<tr class="postInfos"><td class="postComments" colspan="5">'.$commentNumber.' commentaire(s)';
-			$tableResult .= '<a href="index.php#commentPost" class="commentPost">Commenter</a></td>';
-
-			if(empty($_SESSION["login"])) {
-				$tableResult .= '<td style="width:90px" class="postStar">';
-			}
-			if(! empty($_SESSION["login"])) {
-				$tableResult .= '<td class="postStar">';
-			}
-
-			if($markNumber == 0) {
-				for($j=1 ; $j<6 ; $j++) {
-					$tableResult .= '<img src="img/star_cross.png" alt="star'.$j.'" height="15" />';
-				}
-			}
-			else {
-				$starNumber = round($sumMark/$markNumber) / 2;
-				$starCount = 0;
-				for($j=1 ; $j<=$starNumber ; $j++) {
-					$tableResult .= '<img src="img/star_full.png" alt="star'.$j.'" height="15" />';
-					$starCount ++;
-				}
-				if(floor($starNumber) != $starNumber) {
-					$tableResult .= '<img src="img/star_half.png" alt="star'.($j-0.5).'" height="15" />';
-					$starCount ++;
-				}
-				for($j=$starCount ; $j<5 ; $j++) {
-					$tableResult .= '<img src="img/star_empty.png" alt="star'.$j.'" height="15" />';
-					$starCount ++;
-				}
-			}
-
-			if(! empty($_SESSION["login"])) {
-				$tableResult .= ' / <a href="index.php#changeScore" class="postUserMark">';
-
-				$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$values["id"].";";
-				$markResult = mysqli_query($linkDB, $markQuery);
-				$markExists = false;
-
-				for($j=0 ; $j<mysqli_num_rows($markResult) && ! $markExists ; $j++) {
-					$marks = mysqli_fetch_assoc($markResult);
-					if(strtolower($marks["author"]) == strtolower($_SESSION["login"])) {
-						$markExists = true;
-					}
-				}
-				if($markExists) {
-					$starNumber = round($marks["score"]) / 2;
-					$starCount = 0;
-					for($j=1 ; $j<=$starNumber ; $j++) {
-						$tableResult .= '<img src="img/star_full_red.png" alt="star'.$j.'" height="15" />';
-						$starCount ++;
-					}
-					if(floor($starNumber) != $starNumber) {
-						$tableResult .= '<img src="img/star_half_red.png" alt="star'.($j-0.5).'" height="15" />';
-						$starCount ++;
-					}
-					for($j=$starCount ; $j<5 ; $j++) {
-						$tableResult .= '<img src="img/star_empty.png" alt="star'.$j.'" height="15" />';
-						$starCount ++;
-					}
-				}
-				else {
-					for($j=1 ; $j<6 ; $j++) {
-						$tableResult .= '<img src="img/star_cross_red.png" alt="star'.$j.'" height="15" />';
-					}
-				}
-				$tableResult .= '</a>';
-			}
-
-			$tableResult .= '</td></tr>'."\n";
+			$tableResult .= '<tr class="postComment"><td class="commentAuthor" rowspan="3"><img src="img/user.png" alt="user" height="40" class="userPic" />';
+			$tableResult .= '<span class="commentAuthorName">'.$comment["author"].'</span>';
+			$tableResult .= '<br /><span class="commentDate">'.$comment["date"].'</span></td></tr>';
+			$tableResult .= '<tr class="postComment"><th class="commentID">#'.$postID.'.'.$comment["commentID"].'</th><th><a href="#header">'.$post["title"].'</a></th></tr>';
+			$tableResult .= '<tr class="postComment"><td colspan="2">'.$comment["comment"].'</td></tr>';
 
 			$tableResult .= '</table>';
 		}
+		
+		$tableResult .= '</div>';
 
 		return $tableResult;
 	}
