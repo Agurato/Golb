@@ -1,6 +1,7 @@
 <?php
-	include('begin.php');
-	include('util.inc.php');
+	include_once('begin.php');
+	include_once('util.inc.php');
+	include_once('globals.inc.php');
 	beginHTML('Golb','../css/styles.css');
 	beginSession();
 
@@ -35,7 +36,7 @@
 	}
 
 	if($changeScore) {
-		$linkDB = mysqli_connect($_GET["server"], $_GET["user"], $_GET["pw"], $_GET["db"]);
+		$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 
 		$insertQuery = 
 		'INSERT INTO `mark` (`score`, `author`, `postID`)
@@ -48,10 +49,33 @@
 			mysqli_query($linkDB, $updateQuery);
 		}
 
-		header('Location: ../index.php');
+		mysqli_close($linkDB);
+
+		if(! empty($_GET["fromPost"])) {
+			if($_GET["fromPost"] == "true") {
+				header('Location: ../post.php?id='.$_GET["postID"]);
+			}
+			else {
+				header('Location: ../index.php');
+			}
+		}
+		else {
+			header('Location: ../index.php');
+		}
 	}
 	else {
-		header('Location: ../index.php?postID='.$_GET["postID"].'&error='.$error.'#changeScoreModal');
+
+		if(! empty($_GET["fromPost"])) {
+			if($_GET["fromPost"] == "true") {
+				header('Location: ../post.php?id='.$_GET["postID"].'&error='.$error.'#changeScoreModal');
+			}
+			else {
+				header('Location: ../index.php?id='.$_GET["postID"].'&error='.$error.'#changeScoreModal');
+			}
+		}
+		else {
+			header('Location: ../index.php?id='.$_GET["postID"].'&error='.$error.'#changeScoreModal');
+		}
 	}
 
 	endHTML();

@@ -2,6 +2,7 @@
 	include_once('utils/begin.php');
 	include_once('utils/util.inc.php');
 	include_once('utils/forms.inc.php');
+	include_once('utils/globals.inc.php');
 	beginHTML('Golb','css/styles.css');
 	beginSession();
 ?>
@@ -14,11 +15,11 @@
 				header('Location: index.php');
 			}
 
-			$connectionInfos = array("servername" => "127.0.0.1", "username" => "root", "password" => "root", "dbname" =>  "golb");
 			loginForm();
 			registerForm();
-			newPostForm($connectionInfos);
-			changeScore($connectionInfos);
+			newPostForm();
+			changeScore();
+			addComment();
 		?>
 
 		<!-- Title & subtitle -->
@@ -53,7 +54,7 @@
 		</div>
 		<div id="content">
 			<?php
-				$linkDB = initDB($connectionInfos["servername"], $connectionInfos["username"], $connectionInfos["password"], $connectionInfos["dbname"]);
+				$linkDB = initDB(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 
 				echo getFullPost($linkDB, $_GET["id"]);
 

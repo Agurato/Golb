@@ -1,4 +1,5 @@
 <?php
+	include_once('globals.inc.php');
 
 	/* 
 	Used only in admin.php
@@ -52,12 +53,12 @@
 	Initialize the database (creates it if not existing & create the tables)
 	Parameters are the ones used to connect to the database
 	*/
-	function initDB($servername, $username, $password, $dbname) {
-		$linkDB = mysqli_connect($servername, $username, $password);
-		$query = mysqli_query($linkDB, "CREATE DATABASE IF NOT EXISTS `".$dbname."`");
+	function initDB() {
+		$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS);
+		$query = mysqli_query($linkDB, "CREATE DATABASE IF NOT EXISTS `".DB_NAME."`");
 		mysqli_close($linkDB);
 
-		$linkDB = mysqli_connect($servername, $username, $password, $dbname);
+		$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 		$query = mysqli_query($linkDB,
 			"CREATE TABLE IF NOT EXISTS `post` (
 				`id` int NOT NULL UNIQUE AUTO_INCREMENT,
@@ -137,7 +138,7 @@
 
 		$tableResult .= '<tr class="postInfos"><td class="postCat" colspan="6">Catégorie(s) : <strong><em>'.$categories.'</em></strong></td></tr>'."\n";
 
-		$tableResult .= '<tr class="postInfos"><td class="postComments" colspan="5"><a href="post.php?id='.$postRow["id"].'">'.$commentNumber.' commentaire(s)';
+		$tableResult .= '<tr class="postInfos"><td class="postComments" colspan="5"><a href="post.php?id='.$postRow["id"].'">'.$commentNumber.' commentaire(s)</a>';
 		$tableResult .= '<a href="post.php?id='.$postRow["id"].'#commentPostModal" class="commentPost">Commenter</a></td>';
 
 		if(empty($_SESSION["login"])) {
@@ -170,7 +171,7 @@
 		}
 
 		if(! empty($_SESSION["login"])) {
-			$tableResult .= ' / <a href="index.php?postID='.$postRow["id"].'#changeScoreModal" class="postUserMark">';
+			$tableResult .= ' / <a href="?id='.$postRow["id"].'#changeScoreModal" class="postUserMark">';
 
 			$markQuery = "SELECT * FROM `mark` WHERE `postID` = ".$postRow["id"].";";
 			$markResult = mysqli_query($linkDB, $markQuery);

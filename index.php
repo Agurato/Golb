@@ -2,6 +2,7 @@
 	include_once('utils/begin.php');
 	include_once('utils/util.inc.php');
 	include_once('utils/forms.inc.php');
+	include_once('utils/globals.inc.php');
 	beginHTML('Golb','css/styles.css');
 	beginSession();
 ?>
@@ -10,11 +11,10 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
-			$connectionInfos = array("servername" => "127.0.0.1", "username" => "root", "password" => "root", "dbname" =>  "golb");
 			loginForm();
 			registerForm();
-			newPostForm($connectionInfos);
-			changeScore($connectionInfos);
+			newPostForm();
+			changeScore();
 		?>
 
 		<!-- Title & subtitle -->
@@ -49,7 +49,7 @@
 		</div>
 		<div id="content">
 			<?php
-				$linkDB = initDB($connectionInfos["servername"], $connectionInfos["username"], $connectionInfos["password"], $connectionInfos["dbname"]);
+				$linkDB = initDB();
 			?>
 			<form method="post" action="index.php" class="selecter">
 					<div class="selecter">

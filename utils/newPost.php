@@ -1,6 +1,7 @@
 <?php
-	include('begin.php');
-	include('util.inc.php');
+	include_once('begin.php');
+	include_once('util.inc.php');
+	include_once('globals.inc.php');
 	beginHTML('Golb','../css/styles.css');
 	beginSession();
 
@@ -22,7 +23,7 @@
 	}
 
 	if($newPost) {
-		$linkDB = mysqli_connect($_GET["server"], $_GET["user"], $_GET["pw"], $_GET["db"]);
+		$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 
 		$url = $_POST["postLink"];
 		if(strpos($url, "://") !== false) {
@@ -63,6 +64,8 @@
 
 		echo $insertQuery;
 		mysqli_query($linkDB, $insertQuery);
+
+		mysqli_close($linkDB);
 
 		if(isset($_GET["page"])) {
 			header('Location: ../'.$_GET["page"]); 

@@ -1,4 +1,6 @@
 <?php
+	include_once('globals.inc.php');
+	// $db = unserialize(DB_CONNECT);
 
 	// Modal window to sign in
 	function loginForm($loginPage = "utils/login.php") {
@@ -237,7 +239,7 @@
 	<?php
 	}
 
-	function newPostForm($connectionInfos, $newPostPage = "utils/newPost.php") {
+	function newPostForm($newPostPage = "utils/newPost.php") {
 	?>
 		<div id="newPostModal" class="modalDialog">
 			<div>
@@ -269,8 +271,7 @@
 						}
 					}
 
-					echo '<form method="post" action="'.$newPostPage.'?server='.$connectionInfos["servername"];
-					echo '&amp;user='.$connectionInfos["username"].'&amp;pw='.$connectionInfos["password"].'&amp;db='.$connectionInfos["dbname"].'">';
+					echo '<form method="post" action="'.$newPostPage.'">';
 				?>
 					<p class="generalForm">
 						<label for="postTitle" >Titre *</label><br />
@@ -280,15 +281,14 @@
 						<label for="postLink" >Lien *</label><br />
 						<input type="text" name="postLink" id="postLink" maxlength="767" />
 					</p>
-					<p class="generalForm">
-						<label for="postDesc" >Description</label><br />
-						<textarea rows="3" cols="50" name="postDesc" id="postDesc" ></textarea>
-					</p>
 					<p class="generalForm" id="postCat" ><label for="postCat">Catégorie(s) *</label><br />
-						<input type="checkbox" class="postCategory" name="postCat[]" value="html" id="htmlCat" /><label for="htmlCat" >HTML</label>
-						<input type="checkbox" class="postCategory" name="postCat[]" value="css" id="cssCat" /><label for="cssCat" >CSS</label>
-						<input type="checkbox" class="postCategory" name="postCat[]" value="php" id="phpCat" /><label for="phpCat" >PHP</label>
-						<input type="checkbox" class="postCategory" name="postCat[]" value="sql" id="sqlCat" /><label for="sqlCat" >SQL</label>
+					<?php
+						foreach ($GLOBALS["categories"] as $key => $value) {
+							$value = strtolower($value);
+							echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$value.'" id="'.$value.'Cat" />';
+							echo '<label for="'.$value.'Cat" >'.strtoupper($value).'</label>'."\n";
+						}
+					?>
 					</p>
 					<p class="generalForm">
 						<span style="float:right;margin-right:5px;">Les * indiquent les champs obligatoires</span><br />
@@ -301,7 +301,7 @@
 	<?php
 	}
 
-	function changeScore($connectionInfos, $scorePage = "utils/changeScore.php") {
+	function changeScore($scorePage = "utils/changeScore.php") {
 	?>
 		<div id="changeScoreModal" class="modalDialog">
 			<div>
@@ -333,8 +333,12 @@
 						}
 					}
 
-					echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["postID"].'&amp;server='.$connectionInfos["servername"];
-					echo '&amp;user='.$connectionInfos["username"].'&amp;pw='.$connectionInfos["password"].'&amp;db='.$connectionInfos["dbname"].'">';
+					if(basename($_SERVER['PHP_SELF']) == 'index.php') {
+						echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["id"].'">';
+					}
+					elseif(basename($_SERVER['PHP_SELF']) == 'post.php') {
+						echo '<form method="post" action="'.$scorePage.'?fromPost=true&amp;postID='.$_GET["id"].'">';
+					}
 				?>
 					<p class="loginForm">
 						Rentrez une note entre 0 et 10.
@@ -348,13 +352,13 @@
 						</p>
 					</div>
 				</form>
-				<a href="index.php" title="Close" class="close" >Fermer</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
 	}
 
-	function addComment($connectionInfos, $scorePage = "utils/addComment.php") {
+	function addComment($scorePage = "utils/addComment.php") {
 	?>
 		<div id="commentPostModal" class="modalDialog">
 			<div>
@@ -365,14 +369,14 @@
 						if($error != "") {
 							echo "<p>";
 							if(strpos($error, "1") !== false) {
-								echo "Il faut rentrer un score";
+								echo "Il faut rentrer un commentaire";
 								$count ++;
 							}
 							if(strpos($error, "2") !== false) {
 								if($count > 0) {
 									echo "<br />";
 								}
-								echo "Le score doit être un nombre";
+								echo "Commentaire trop long (750 char. max)";
 								$count ++;
 							}
 							if(strpos($error, "3") !== false) {
@@ -386,22 +390,17 @@
 						}
 					}
 
-					echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["postID"].'&amp;server='.$connectionInfos["servername"];
-					echo '&amp;user='.$connectionInfos["username"].'&amp;pw='.$connectionInfos["password"].'&amp;db='.$connectionInfos["dbname"].'">';
+					echo '<form method="post" action="'.$scorePage.'?postID='.$_GET["id"].'">';
 				?>
-					<p class="loginForm">
-						Rentrez une note entre 0 et 10.
+					<p class="generalForm">
+						<label for="comment" >Commentaire</label><br />
+						<textarea rows="5" cols="50" name="comment" id="comment"></textarea>
 					</p>
-
-					<div class="leftForm">
-						<p class="loginForm">
-							<label for="newScore" style="width:50px;">Note</label>
-							<input type="text" name="newScore" id="newScore" maxlength="4" style="width:250px;" />
-							<input type="submit" class="send" value="Noter" />
-						</p>
-					</div>
+					<p class="generalForm">
+						<input type="submit" class="send" value="Commenter" />
+					</p>
 				</form>
-				<a href="index.php" title="Close" class="close" >Fermer</a>
+				<a href="" title="Close" class="close" >Fermer</a>
 			</div>
 		</div>
 	<?php
