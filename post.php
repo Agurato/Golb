@@ -15,9 +15,11 @@
 				header('Location: index.php');
 			}
 
+			$linkDB = initDB(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
+
 			loginForm();
 			registerForm();
-			newPostForm();
+			newPostForm($linkDB, "utils/newPost.php?page=post.php");
 			changeScore();
 			addComment();
 		?>
@@ -54,7 +56,6 @@
 		</div>
 		<div id="content">
 			<?php
-				$linkDB = initDB(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 
 				echo getFullPost($linkDB, $_GET["id"]);
 

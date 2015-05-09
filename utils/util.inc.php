@@ -197,7 +197,19 @@
 		$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$postRow["author"].'</span><br />';
 		$tableResult .= '<span class="postDate">'.$postRow["date"].'</span><br /><img src="img/user.png" alt="user" height="80" /></td></tr>'."\n";
 
-		$tableResult .= '<tr class="postInfos"><th class="postID">#'.$postRow["id"].'</th><th class="postTitle" colspan="5">'.$postRow["title"].'</th></tr>'."\n";
+		if(! empty($_SESSION["login"]) && ! empty($_SESSION["userLevel"])) {
+			if((strtolower($postRow["author"]) == strtolower($_SESSION["login"])) || $_SESSION["userLevel"] == 3 ) {
+				$tableResult .= '<tr class="postInfos"><th class="postID">#'.$postRow["id"].'</th><th class="postTitle" colspan="4">'.$postRow["title"].'</th>';
+				$tableResult .= '<td class="postOptions"><a href="?id='.$postRow["id"].'#newPostModal"><img src="img/edit.png" alt="edit" height="20" /></a> ';
+				$tableResult .= '<a href="utils/deletePost.php?id='.$postRow["id"].'"><img src="img/delete.png" alt="delete" height="20" /></a></td></tr>'."\n";
+			}
+			else {
+				$tableResult .= '<tr class="postInfos"><th class="postID">#'.$postRow["id"].'</th><th class="postTitle" colspan="5">'.$postRow["title"].'</th></tr>';
+			}
+		}
+		else {
+			$tableResult .= '<tr class="postInfos"><th class="postID">#'.$postRow["id"].'</th><th class="postTitle" colspan="5">'.$postRow["title"].'</th></tr>';
+		}
 
 		$tableResult .= '<tr class="postInfos"><td class="postLink" colspan="6">';
 		$tableResult .= '<a href="'.$postRow["link"].'"><img src="img/urlLink.png" alt="url" height="15" /> '.$postRow["link"].'</a></td></tr>'."\n";

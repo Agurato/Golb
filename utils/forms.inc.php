@@ -271,15 +271,51 @@
 						}
 					}
 
-					echo '<form method="post" action="'.$newPostPage.'">';
+					if(empty($_GET["id"])) {
+						echo '<form method="post" action="'.$newPostPage.'">';
+					}
+					else {
+						$postQuery = "SELECT * FROM `post` WHERE `id` = ".$_GET["id"].";";
+						$postResult = mysqli_query($linkDB, $postQuery);
+						$post = mysqli_fetch_assoc($postResult);
+						echo '<form method="post" action="utils/changePost.php">';
+						echo '<p><input type="hidden" name="postID" id="postID" value="'.$_GET["id"].'" />';
+						echo '<input type="hidden" name="page" id="page" value="'.basename($_SERVER['PHP_SELF']).'" />';
+						echo '</p>';
+					}
 				?>
 					<p class="generalForm">
 						<label for="postTitle" >Titre *</label><br />
-						<input type="text" name="postTitle" id="postTitle" maxlength="32" />
+						<?php
+							if(empty($_GET["id"])) {
+								echo '<input type="text" name="postTitle" id="postTitle" maxlength="32" />';
+							}
+							else {
+								echo '<input type="text" name="postTitle" id="postTitle" maxlength="32" value="'.$post["title"].'" />';
+							}
+						?>
 					</p>
 					<p class="generalForm">
 						<label for="postLink" >Lien *</label><br />
-						<input type="text" name="postLink" id="postLink" maxlength="767" />
+						<?php
+							if(empty($_GET["id"])) {
+								echo '<input type="text" name="postLink" id="postLink" maxlength="767" />';
+							}
+							else {
+								echo '<input type="text" name="postLink" id="postLink" maxlength="767" value="'.$post["link"].'" />';
+							}
+						?>
+					</p>
+					<p class="generalForm">
+						<label for="postDesc" >Description</label><br />
+						<?php
+							if(empty($_GET["id"])) {
+								echo '<textarea rows="5" cols="50" name="postDesc" id="postDesc"></textarea>';
+							}
+							else {
+								echo '<textarea rows="5" cols="50" name="postDesc" id="postDesc">'.$post["description"].'</textarea>';
+							}
+						?>
 					</p>
 					<p class="generalForm" id="postCat" ><label for="postCat">Catégorie(s) *</label><br />
 					<?php
@@ -288,7 +324,20 @@
 
 						for($i=0 ; $i<mysqli_num_rows($categoriesResult) ; $i++) {
 							$values = mysqli_fetch_assoc($categoriesResult);
-							echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$values["name"].'" id="'.$values["name"].'Cat" />';
+
+							if(! empty($_GET["id"])) {
+								$checkCatQuery = 'SELECT * FROM `is_used` WHERE `postID` = '.$_GET["id"].' AND `categoryName` = "'.$values["name"].'";';
+								$checkCatResult = mysqli_query($linkDB, $checkCatQuery);
+								if(mysqli_num_rows($checkCatResult) == 1) {
+									echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$values["name"].'" id="'.$values["name"].'Cat" checked="checked" />';
+								}
+								else {
+									echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$values["name"].'" id="'.$values["name"].'Cat" />';
+								}
+							}
+							else {
+								echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$values["name"].'" id="'.$values["name"].'Cat" />';
+							}
 							echo '<label for="'.$values["name"].'Cat" >'.$values["name"].'</label>'."\n";
 						}
 					?>
@@ -435,15 +484,12 @@
 					}
 
 					echo '<form method="post" action="'.$categoryPage.'">';
-					if(! empty($_GET["name"])) {
-						echo '<form method="post" action="'.$categoryPage.'?name='.$_GET["name"].'">';
-					}
 				?>
 					<?php
 						if(! empty($_GET["name"])) {
 							echo '<p class="generalForm">';
 							echo '<label for="oldName">Ancien nom de la catégorie</label><br />';
-							echo '<input type="text" name="oldName" id="oldName" value="'.$_GET["name"].'" readonly />';
+							echo '<input type="text" name="oldName" id="oldName" value="'.$_GET["name"].'" readonly="readonly" />';
 							echo '</p>';
 						}
 					?>

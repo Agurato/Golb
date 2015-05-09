@@ -118,6 +118,14 @@ tr.postInfos > td.postAuthor {
 	padding: 5px;
 }
 
+tr.postInfos > td.postOptions {
+	text-align: right;
+	width: 0px;
+	border: none;
+	padding-right: 5px;
+	vertical-align: center;
+}
+
 span.postAuthorName {
 	font-weight: bold;
 }

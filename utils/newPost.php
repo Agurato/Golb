@@ -8,6 +8,12 @@
 	$newPost = true;
 	$error = "";
 
+	if(! empty($_SESSION["userLevel"])) {
+		if($_SESSION["userLevel"] < 2) {
+			header('Location: index.php');
+		}
+	}
+
 	// If the link and title have been sent
 	if(empty($_POST["postTitle"])) {
 		$error .= "1";
@@ -32,7 +38,7 @@
 
 		$insertQuery = 
 		'INSERT INTO `post` (`link`, `title`, `description`, `author`)
-			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", " ", "'.$_SESSION["login"].'");';
+			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'");';
 
 		echo $insertQuery.'<br />';
 		mysqli_query($linkDB, $insertQuery);
