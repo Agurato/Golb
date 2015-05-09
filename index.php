@@ -74,7 +74,23 @@
 				else {
 					echo '<p>Votre inscription est en cours</p>';
 				}
-				echo getPosts($linkDB, "date");
+
+				$page = 1;
+				if(isset($_GET["page"])) {
+					if(! ($page = intval($_GET["page"]))) {
+						$page = 1;
+					}
+					else if($page < 1) {
+						$page = 1;
+					}
+					else {
+						$page = $_GET["page"];
+					}
+				}
+				
+				echo getPosts($linkDB, ($page-1)*20, 'date', 'DESC');
+
+				echo accessPages($linkDB, $page);
 
 				mysqli_close($linkDB);
 			?>

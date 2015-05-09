@@ -445,3 +445,13 @@ input#valider {
 	text-align: left;
 	color:#7f8c8d
 }
+
+.pageNumber {
+	padding: 5px;
+	margin: 5px;
+	background-color: #11181f;
+}
+
+.actualPage {
+	background-color: #233140;
+}

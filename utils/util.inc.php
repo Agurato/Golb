@@ -101,7 +101,6 @@
 				`title` varchar(767) NOT NULL,
 				`description` varchar(767),
 				`author` varchar(32) NOT NULL,
-				`cat` varchar(767) NOT NULL,
 				`date` timestamp NOT NULL,
 				PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
@@ -294,10 +293,15 @@
 		return $tableResult;
 	}
 
-	function getPosts($linkDB, $order) {
+	function getPosts($linkDB, $beginning, $order, $direction) {
 		$tableResult = '';
 
-		$query = "SELECT * FROM `post` ORDER BY `id` DESC LIMIT 20";
+		if(($direction == 'ASC' || $direction == 'DESC') && in_array($order, array('id', 'date'))) {
+			$query = 'SELECT * FROM `post` ORDER BY `'.$order.'` '.$direction.' LIMIT '.$beginning.', 20;';
+		}
+		else {
+			$query = 'SELECT * FROM `post` ORDER BY `id` ASC LIMIT '.$beginning.', 20;';
+		}
 		$result = mysqli_query($linkDB, $query);
 
 		for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
@@ -342,5 +346,54 @@
 		$tableResult .= '</div>';
 
 		return $tableResult;
+	}
+
+	function accessPages($linkDB, $page) {
+		$result = '';
+
+		$pageNumberResult = mysqli_query($linkDB, 'SELECT * FROM `post`;');
+		$pageNumber = floor(mysqli_num_rows($pageNumberResult)/20) + 1;
+
+		echo '<div id="pageNumbers">';
+
+		if($page-2 > 1) {
+			$result .= '<a href="index.php?page=1" class="pageNumber">1</a>';
+			if($page-3 > 1) {
+				if($page-3 == 2) {
+					$result .= '<a href="index.php?page=2" class="pageNumber">2</a>';
+				}
+				else {
+					$result .= '<span class="pageNumber">...</span>';
+				}
+			}
+		}
+
+		$i = 0;
+		for($i=$page-2 ; $i<=$page+2 ; $i++) {
+			if(($i > 0) && ($i <= $pageNumber)) {
+				if($i == $page) {
+					$result .= '<a href="index.php?page='.$i.'" class="pageNumber actualPage">'.$i.'</a>';
+				}
+				else {
+					$result .= '<a href="index.php?page='.$i.'" class="pageNumber">'.$i.'</a>';
+				}
+			}
+		}
+
+		if($page+2 < $pageNumber) {
+			if($page+3 < $pageNumber) {
+				if($page+3 == $pageNumber-1) {
+					$result .= '<a href="index.php?page='.($pageNumber-1).'" class="pageNumber">'.($pageNumber-1).'</a>';
+				}
+				else {
+					$result .= '<span class="pageNumber">...</span>';
+				}
+			}
+			$result .= '<a href="index.php?page='.$pageNumber.'" class="pageNumber">'.$pageNumber.'</a>';
+		}
+
+		echo '</div>';
+
+		return $result;
 	}
 ?>
