@@ -26,15 +26,10 @@
 		$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 
 		$url = $_POST["postLink"];
-		if(strpos($url, "://") !== false) {
+		if(strpos($url, "://") === false) {
 			$url = "http://".$url;
 		}
 
-		print_r($_POST["postCat"]).'<br />';
-
-		// $insertQuery = 
-		// 'INSERT INTO `post` (`link`, `title`, `description`, `author`)
-		// 	VALUES ("'.$url.'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'");';
 		$insertQuery = 
 		'INSERT INTO `post` (`link`, `title`, `description`, `author`)
 			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", " ", "'.$_SESSION["login"].'");';

@@ -409,7 +409,7 @@
 	<?php
 	}
 
-	function addCategoryForm($categoryPage = "utils/category.php") {
+	function addCategoryForm($categoryPage = "utils/addCategory.php") {
 	?>
 		<div id="addCategoryModal" class="modalDialog">
 			<div>
@@ -430,25 +430,36 @@
 								echo "Catégorie déjà utilisée";
 								$count ++;
 							}
-							if(strpos($error, "3") !== false) {
-								if($count > 0) {
-									echo "<br />";
-								}
-								echo "Action manquante";
-								$count ++;
-							}
 							echo "</p>";
 						}
 					}
 
-					echo '<form method="post" action="'.$categoryPage.'?action=add">';
+					echo '<form method="post" action="'.$categoryPage.'">';
+					if(! empty($_GET["name"])) {
+						echo '<form method="post" action="'.$categoryPage.'?name='.$_GET["name"].'">';
+					}
 				?>
+					<?php
+						if(! empty($_GET["name"])) {
+							echo '<p class="generalForm">';
+							echo '<label for="oldName">Ancien nom de la catégorie</label><br />';
+							echo '<input type="text" name="oldName" id="oldName" value="'.$_GET["name"].'" readonly />';
+							echo '</p>';
+						}
+					?>
 					<p class="generalForm">
 						<label for="catName" >Nom de la catégorie</label><br />
 						<input type="text" name="catName" id="catName" maxlength="16" />
 					</p>
 					<p class="generalForm">
-						<input type="submit" class="send" value="Ajouter" />
+						<?php
+							if(! empty($_GET["name"])) {
+								echo '<input type="submit" class="send" value="Changer" />';
+							}
+							else {
+								echo '<input type="submit" class="send" value="Ajouter" />';
+							}
+						?>
 					</p>
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>

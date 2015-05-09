@@ -56,7 +56,7 @@
 			</ul>
 		</div>
 		<div id="content">
-			<p style="margin-top:50px;">List des catégories disponbiles</p>
+			<p style="margin-top:50px;">Liste des catégories disponbiles</p>
 			<?php
 				$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 

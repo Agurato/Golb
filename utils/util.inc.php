@@ -73,13 +73,13 @@
 			$categoryUses = mysqli_num_rows($categoryResult);
 			
 			$result .= $categoryUses.'</td>';
-			$result .= '<td class="catOption"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></td>';
-			$result .= '<td class="catOption"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></td>';
+			$result .= '<td class="catOption"><a href="?name='.$values["name"].'#addCategoryModal"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></a></td>';
+			$result .= '<td class="catOption"><a href="utils/deleteCategory.php?name='.$values["name"].'"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></a></td>';
 
 			$result .= '</tr>';
 		}
 
-		$result .= '<tr><td class="addCat" colspan="4" ><a href="#addCategoryModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
+		$result .= '<tr><td class="addCat" colspan="4" ><a href="admin.php#addCategoryModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
 		$result .= '</table>';
 		return $result;
 	}
