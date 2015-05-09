@@ -5,22 +5,28 @@
 	Used only in admin.php
 	Return the list of all users in a <table>
 	*/
-	function usersTable($accountsFile = "users/accounts.csv", $imgDir = "img/") {
+	function usersTable($linkDB, $accountsFile = "users/accounts.csv", $imgDir = "img/") {
 		$result = '';
 		$result .= '<table id="accountsList">';
 
 		// Column names
 		$result .= '<tr class="userHeader"><th>Username</th><th>Mail</th><th>User level</th>';
-		$result .= '<th>Signature</th><th colspan="4">Options</th></tr>';
+		$result .= '<th>Nombre de posts</th><th colspan="4">Options</th></tr>';
 
 		// We open the file
 		if(($handle = fopen($accountsFile, "r")) !== false) {
 			// For each line
 			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
 				if(count($data) == 5) {
+
+					$postNumber = 0;
+					$postQuery = 'SELECT * FROM `post` WHERE `author` = "'.$data[0].'";';
+					$postResult = mysqli_query($linkDB, $postQuery);
+					$postNumber = mysqli_num_rows($postResult);
+
 					// We display the infos
 					$result .= '<tr class="userData"><td>'.$data[0].'</td><td>'.$data[2].'</td>';
-					$result .= '<td>'.$data[3].'</td><td>'.$data[4].'</td><td class="userOption">';
+					$result .= '<td>'.$data[3].'</td><td>'.$postNumber.'</td><td class="userOption">';
 					if($data[3]>=2) {
 						$result .= '<img src="'.$imgDir.'check.png" alt="checkLevel2" height="25" />';
 					}
@@ -46,6 +52,35 @@
 		$result .= '<tr><td class="addUser" colspan="8" ><a href="admin.php#registerModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
 		$result .= '</table>';
 
+		return $result;
+	}
+
+	function categoriesTable($linkDB, $imgDir = "img/") {
+		$result = '';
+
+		$result .= '<table id="categoriesList">';
+		$result .= '<tr class="catHeader"><th>Nom de la catégorie</th><th>Nombre d\'utilisations</th><th colspan="2">Options</th></tr>';
+
+		$categoriesQuery = 'SELECT * FROM `category`;';
+		$categoriesResult = mysqli_query($linkDB, $categoriesQuery);
+		for($i=0 ; $i<mysqli_num_rows($categoriesResult) ; $i++) {
+			$values = mysqli_fetch_assoc($categoriesResult);
+			$result .= '<tr class="catData"><td>'.$values["name"].'</td><td>';
+
+			$categoryUses = 0;
+			$categoryQuery = 'SELECT * FROM `is_used` WHERE `categoryName` = "'.$values["name"].'";';
+			$categoryResult = mysqli_query($linkDB, $categoryQuery);
+			$categoryUses = mysqli_num_rows($categoryResult);
+			
+			$result .= $categoryUses.'</td>';
+			$result .= '<td class="catOption"><img src="'.$imgDir.'edit.png" alt="edit" height="25" /></td>';
+			$result .= '<td class="catOption"><img src="'.$imgDir.'delete.png" alt="delete" height="25" /></td>';
+
+			$result .= '</tr>';
+		}
+
+		$result .= '<tr><td class="addCat" colspan="4" ><a href="#addCategoryModal"><img src="'.$imgDir.'add.png" alt="add" height="25" />Ajouter</a></td></tr>';
+		$result .= '</table>';
 		return $result;
 	}
 
@@ -100,13 +135,46 @@
 			"ALTER TABLE `comment`
 				ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`postID`) REFERENCES `post` (`id`);");
 
+		$query = mysqli_query($linkDB,
+			"CREATE TABLE IF NOT EXISTS `category` (
+				`name` varchar(16) NOT NULL,
+				PRIMARY KEY (`name`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		$query = mysqli_query($linkDB,
+			"INSERT INTO `category` (`name`)
+				VALUES (\"HTML\");");
+
+		$query = mysqli_query($linkDB,
+			"CREATE TABLE IF NOT EXISTS `is_used` (
+				`categoryName` varchar(16) NOT NULL,
+				`postID` int NOT NULL,
+				PRIMARY KEY (`categoryName`, `postID`)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		$query = mysqli_query($linkDB,
+			"ALTER TABLE `is_used`
+				ADD CONSTRAINT `is_used_ibfk_1` FOREIGN KEY (`categoryName`) REFERENCES `category` (`name`);");
+		$query = mysqli_query($linkDB,
+			"ALTER TABLE `is_used`
+				ADD CONSTRAINT `is_used_ibfk_2` FOREIGN KEY (`postID`) REFERENCES `post` (`id`);");
+
 		return $linkDB;
 	}
 
 	function postInfos($linkDB, $postRow) {
 		$tableResult = '';
 
-		$categories = str_replace('/', ' / ', $postRow["cat"]);
+		$categories = '';
+		$categoriesQuery = 'SELECT * FROM `is_used` WHERE `postID` = '.$postRow["id"].";";
+		$categoriesResult = mysqli_query($linkDB, $categoriesQuery);
+		for($i=0 ; $i<mysqli_num_rows($categoriesResult) ; $i++) {
+			$cats = mysqli_fetch_assoc($categoriesResult);
+			if($i > 0) {
+				$categories .= ' / ';
+			}
+			$categories .= $cats["categoryName"];
+		}
 
 		$commentNumber = 0;
 		$commentQuery = "SELECT * FROM `comment` WHERE `postID` = ".$postRow["id"].";";

@@ -10,9 +10,19 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
+
+			if(! empty($_SESSION['userLevel'])) {
+				if($_SESSION['userLevel'] < 3) {
+					header('Location: index.php');
+				}
+			}
+			else {
+				header('Location: index.php');
+			}
 			loginForm();
 			registerForm("utils/register.php?page=admin.php");
 			deleteAccountForm("utils/deleteAccountAdmin.php");
+			addCategoryForm();
 		?>
 
 		<!-- Title & subtitle -->
@@ -46,16 +56,15 @@
 			</ul>
 		</div>
 		<div id="content">
+			<p style="margin-top:50px;">List des catégories disponbiles</p>
 			<?php
-				if(! empty($_SESSION['userLevel'])) {
-					if($_SESSION['userLevel'] == 3) {
-						echo '<p style="margin-top:50px;">Liste des utilisateurs du site</p>';
-						echo usersTable("users/accounts.csv", "img/");
-					}
-				}
-				else {
-					header('Location: index.php');
-				}
+				$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
+
+				echo categoriesTable($linkDB);
+				echo '<p style="margin-top:50px;">Liste des utilisateurs du site</p>';
+				echo usersTable($linkDB, "users/accounts.csv");
+
+				mysqli_close($linkDB);
 			?>
 		</div>
 	</div>

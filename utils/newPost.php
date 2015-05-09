@@ -30,40 +30,34 @@
 			$url = "http://".$url;
 		}
 
+		print_r($_POST["postCat"]).'<br />';
+
+		// $insertQuery = 
+		// 'INSERT INTO `post` (`link`, `title`, `description`, `author`)
+		// 	VALUES ("'.$url.'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'");';
 		$insertQuery = 
-		'INSERT INTO `post` (`link`, `title`, `description`, `author`, `cat`)
-			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", "'.$_POST["postDesc"].'", "'.$_SESSION["login"].'", "';
+		'INSERT INTO `post` (`link`, `title`, `description`, `author`)
+			VALUES ("'.$url.'", "'.$_POST["postTitle"].'", " ", "'.$_SESSION["login"].'");';
 
-		$count = 0;
-		if(in_array("html", $_POST["postCat"])) {
-			$insertQuery .= 'HTML';
-			$count ++;
-		}
-		if(in_array("css", $_POST["postCat"])) {
-			if($count > 0) {
-				$insertQuery .= '/';
-			}
-			$insertQuery .= 'CSS';
-			$count ++;
-		}
-		if(in_array("php", $_POST["postCat"])) {
-			if($count > 0) {
-				$insertQuery .= '/';
-			}
-			$insertQuery .= 'PHP';
-			$count ++;
-		}
-		if(in_array("sql", $_POST["postCat"])) {
-			if($count > 0) {
-				$insertQuery .= '/';
-			}
-			$insertQuery .= 'SQL';
-		}
-
-		$insertQuery .= '")';
-
-		echo $insertQuery;
+		echo $insertQuery.'<br />';
 		mysqli_query($linkDB, $insertQuery);
+
+		$lastPost = 0;
+		$lastPostQuery = "SELECT * FROM `post`;";
+		$lastPostResult = mysqli_query($linkDB, $lastPostQuery);
+		for($i=0 ; $i<mysqli_num_rows($lastPostResult) ; $i++) {
+			$row = mysqli_fetch_assoc($lastPostResult);
+			$lastPost = $row["id"];
+		}
+
+		foreach ($_POST["postCat"] as $key => $value) {
+			$insertQuery = 
+			'INSERT INTO `is_used` (`postID`, `categoryName`)
+				VALUES ('.$lastPost.', "'.$value.'");';
+
+			echo $insertQuery.'<br />';
+			mysqli_query($linkDB, $insertQuery);
+		}
 
 		mysqli_close($linkDB);
 

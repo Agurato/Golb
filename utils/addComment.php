@@ -8,7 +8,7 @@
 	$addComment = true;
 	$error = "";
 
-	// If the link and title have been sent
+	// If the comment is sent and not too long
 	if(empty($_POST["comment"])) {
 		$error .= "1";
 		$addComment = false;
@@ -31,12 +31,6 @@
 				$split[$i] .= '-';
 			}
 			array_splice($words, $key, 1, $split);
-			// while(strlen($value) > 40) {
-			// 	echo "<p>$value est long : ".strlen($value)."</p>";
-			// 	array_splice($words, $key+$i, 1, substr($value, 0, 40).'-');
-			// 	$value = substr($value, 42);
-			// 	$i++;
-			// }
 		}
 
 		$_POST["comment"] = implode(" ", $words);
@@ -50,12 +44,12 @@
 
 		mysqli_close($linkDB);
 
-		// header('Location: ../post.php?id='.$_GET["postID"]);
+		header('Location: ../post.php?id='.$_GET["postID"]);
 	}
 	else {
 		echo "error = ".$error."<br />";
 
-		// header('Location: ../post.php?id='.$_GET["postID"].'&error='.$error.'#commentPostModal');
+		header('Location: ../post.php?id='.$_GET["postID"].'&error='.$error.'#commentPostModal');
 	}
 
 	endHTML();

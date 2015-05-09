@@ -11,9 +11,10 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
+			$linkDB = initDB();
 			loginForm();
 			registerForm();
-			newPostForm();
+			newPostForm($linkDB);
 			changeScore();
 		?>
 
@@ -48,9 +49,6 @@
 			</ul>
 		</div>
 		<div id="content">
-			<?php
-				$linkDB = initDB();
-			?>
 			<form method="post" action="index.php" class="selecter">
 					<div class="selecter">
 						<select name="Selectioner une rubrique" id="rubrique">

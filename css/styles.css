@@ -20,6 +20,35 @@ a {
 	color:#7f8c8d;
 }
 
+table#categoriesList {
+	border: 1px solid black;
+	border-collapse: collapse;
+	margin-bottom: 30px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;	
+}
+
+tr.catHeader > th {
+	border: 1px solid black;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+tr.catData > td {
+	border: 1px solid black;
+}
+
+tr > td.catOption {
+	padding-top: 5px;
+}
+
+tr > td.addCat {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
 /* List of accounts in admin.php */
 table#accountsList {
 	border: 1px solid black;

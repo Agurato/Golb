@@ -239,7 +239,7 @@
 	<?php
 	}
 
-	function newPostForm($newPostPage = "utils/newPost.php") {
+	function newPostForm($linkDB, $newPostPage = "utils/newPost.php") {
 	?>
 		<div id="newPostModal" class="modalDialog">
 			<div>
@@ -283,10 +283,13 @@
 					</p>
 					<p class="generalForm" id="postCat" ><label for="postCat">Catégorie(s) *</label><br />
 					<?php
-						foreach ($GLOBALS["categories"] as $key => $value) {
-							$value = strtolower($value);
-							echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$value.'" id="'.$value.'Cat" />';
-							echo '<label for="'.$value.'Cat" >'.strtoupper($value).'</label>'."\n";
+						$categoriesQuery = "SELECT * FROM `category`;";
+						$categoriesResult = mysqli_query($linkDB, $categoriesQuery);
+
+						for($i=0 ; $i<mysqli_num_rows($categoriesResult) ; $i++) {
+							$values = mysqli_fetch_assoc($categoriesResult);
+							echo '<input type="checkbox" class="postCategory" name="postCat[]" value="'.$values["name"].'" id="'.$values["name"].'Cat" />';
+							echo '<label for="'.$values["name"].'Cat" >'.$values["name"].'</label>'."\n";
 						}
 					?>
 					</p>
@@ -398,6 +401,54 @@
 					</p>
 					<p class="generalForm">
 						<input type="submit" class="send" value="Commenter" />
+					</p>
+				</form>
+				<a href="" title="Close" class="close" >Fermer</a>
+			</div>
+		</div>
+	<?php
+	}
+
+	function addCategoryForm($categoryPage = "utils/category.php") {
+	?>
+		<div id="addCategoryModal" class="modalDialog">
+			<div>
+				<?php
+					if(isset($_GET["error"])) {
+						$error = $_GET["error"];
+						$count = 0;
+						if($error != "") {
+							echo "<p>";
+							if(strpos($error, "1") !== false) {
+								echo "Il faut rentrer un nom de catégorie";
+								$count ++;
+							}
+							if(strpos($error, "2") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "Catégorie déjà utilisée";
+								$count ++;
+							}
+							if(strpos($error, "3") !== false) {
+								if($count > 0) {
+									echo "<br />";
+								}
+								echo "Action manquante";
+								$count ++;
+							}
+							echo "</p>";
+						}
+					}
+
+					echo '<form method="post" action="'.$categoryPage.'?action=add">';
+				?>
+					<p class="generalForm">
+						<label for="catName" >Nom de la catégorie</label><br />
+						<input type="text" name="catName" id="catName" maxlength="16" />
+					</p>
+					<p class="generalForm">
+						<input type="submit" class="send" value="Ajouter" />
 					</p>
 				</form>
 				<a href="" title="Close" class="close" >Fermer</a>
