@@ -49,34 +49,67 @@
 			</ul>
 		</div>
 		<div id="content">
+
 			<form method="get" action="index.php" class="selecter">
-					<div class="selecter">
-						<select name="category" id="rubrique">
-							<option value="Rubrique">Rubrique</option>
-							<?php
-								$options = mysqli_query($linkDB, 'SELECT * FROM `category`');
-								for($i=0 ; $i<mysqli_num_rows($options) ; $i++) {
-									$row = mysqli_fetch_assoc($options);
-									echo '<option value="'.$row["name"].'"';
-									if(! empty($_GET["category"]) && $_GET["category"] == $row["name"]) {
-										echo 'selected="selected" ';
-									}
-									echo '>'.$row["name"].'</option>';
-								}
-							?>
-						</select>
-					</div>
-					<div>
-						<input type="submit" name="valider" value="Valider" id="valider"/>
-					</div>
+				<div>
+				<select name="category" id="category">
+					<option value="all">Tout</option>
+					<?php
+						$options = mysqli_query($linkDB, 'SELECT * FROM `category`');
+						for($i=0 ; $i<mysqli_num_rows($options) ; $i++) {
+							$row = mysqli_fetch_assoc($options);
+							echo '<option value="'.$row["name"].'"';
+							if(! empty($_GET["category"]) && $_GET["category"] == $row["name"]) {
+								echo ' selected="selected"';
+							}
+							echo ' >'.$row["name"].'</option>'."\n";
+						}
+					?>
+				</select>
+				<select name="order" id="order">
+				<?php
+					echo '<option value="idDESC"';
+					if(! empty($_GET["order"]) && $_GET["order"] == 'idDESC') {
+						echo ' selected="selected"';
+					}
+					echo ' >Du plus récent au plus ancien</option>';
+
+					echo '<option value="idASC"';
+					if(! empty($_GET["order"]) && $_GET["order"] == 'idASC') {
+						echo ' selected="selected"';
+					}
+					echo ' >Du plus ancien au plus récent</option>';
+
+					echo '<option value="dateDESC"';
+					if(! empty($_GET["order"]) && $_GET["order"] == 'dateDESC') {
+						echo ' selected="selected"';
+					}
+					echo ' >Du plus récent au plus ancien (modifié)</option>';
+
+					echo '<option value="dateASC"';
+					if(! empty($_GET["order"]) && $_GET["order"] == 'dateASC') {
+						echo ' selected="selected"';
+					}
+					echo ' >Du plus ancien au plus récent (modifié)</option>';
+
+					echo '<option value="score"';
+					if(! empty($_GET["order"]) && $_GET["order"] == 'score') {
+						echo ' selected="selected"';
+					}
+					echo ' >Du mieux noté au moins bien noté</option>';
+				?>
+				</select>
+
+				<input type="submit" name="filter" value="Valider" id="filter" />
+				</div>
 			</form>
 
 			<?php
 				if(!empty($_SESSION["login"]) && $_SESSION["userLevel"] > 1) {
-					echo '<a href="index.php#newPostModal">Nouveau post</a>';
+					echo '<p><a href="index.php#newPostModal">Nouveau post</a></p>';
 				}
 				else if(empty($_SESSION["login"])) {
-					echo '<a href="index.php#loginModal">Nouveau post</a>';
+					echo '<p><a href="index.php#loginModal">Nouveau post</a></p>';
 				}
 				else {
 					echo '<p>Votre inscription est en cours</p>';
@@ -94,15 +127,24 @@
 						$page = $_GET["page"];
 					}
 				}
-				
-				if(! empty($_GET["category"])) {
-					echo getPosts($linkDB, ($page-1)*20, $_GET["category"], 'date', 'DESC');
-				}
-				else {
-					echo getPosts($linkDB, ($page-1)*20, '', 'date', 'DESC');
-				}
 
-				echo accessPages($linkDB, '', $page);
+				$url = explode('/', $_SERVER["REQUEST_URI"])[3];
+				if(isset($_GET["filter"])) {
+					echo '<meta http-equiv="refresh" content="0; url='.str_replace('&', '&amp;', explode('&filter=', $url)[0]).'" />';
+				}
+				
+				$category = 'all';
+				if(! empty($_GET["category"])) {
+					$category = $_GET["category"];
+				}
+				$order = 'id';
+				if(! empty($_GET["order"])) {
+					$order = $_GET["order"];
+				}
+				
+				echo getPosts($linkDB, ($page-1)*20, $category, $order);
+
+				echo accessPages($linkDB, $url, $page);
 
 				mysqli_close($linkDB);
 			?>

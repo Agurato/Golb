@@ -301,8 +301,32 @@
 		return $tableResult;
 	}
 
-	function getPosts($linkDB, $beginning, $filter, $order, $direction) {
+	function getPosts($linkDB, $beginning, $filter, $order) {
 		$tableResult = '';
+
+		// Determines the order (type) and the direction (top to bottom ot bottom to top) of the posts
+		if(strpos($order, 'ASC') !== false) {
+			$direction = 'ASC';
+		}
+		else if(strpos($order, 'DESC') !== false) {
+			$direction = 'DESC';
+		}
+		else {
+			$direction = 'DESC';
+		}
+
+		if(strpos($order, 'id') !== false) {
+			$order = 'id';
+		}
+		else if(strpos($order, 'date') !== false) {
+			$order = 'date';
+		}
+		else if(strpos($order, 'score') !== false) {
+			$order = 'score';
+		}
+		else {
+			$order = 'id';
+		}
 
 		$query = 'SELECT * FROM `post`';
 
@@ -316,21 +340,54 @@
 			$query .= ' WHERE `id` IN (SELECT `postID` FROM `is_used` WHERE `categoryName` = "'.$filter.'")';
 		}
 
-		if(($direction == 'ASC' || $direction == 'DESC') && in_array($order, array('id', 'date'))) {
+		if(in_array($order, array('id', 'date'))) {
 			$query .= ' ORDER BY `'.$order.'` '.$direction;
 		}
-		else {
-			$query .= ' ORDER BY `id` ASC';
-		}
+
 		$query .= ' LIMIT '.$beginning.', 20;';
 
 		$result = mysqli_query($linkDB, $query);
 
-		for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
+		if($order != 'score') {
+			for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
 
-			$values = mysqli_fetch_assoc($result);
-			$tableResult .= postInfos($linkDB, $values);
-			
+				$values = mysqli_fetch_assoc($result);
+				$tableResult .= postInfos($linkDB, $values);
+				
+			}
+		}
+		else {
+			$averages = array();
+			$lines = array();
+			for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
+
+				$sum = 0;
+				$average = 0;
+				$values = mysqli_fetch_assoc($result);
+				$markResult = mysqli_query($linkDB, 'SELECT * FROM `mark` WHERE `postID` = '.$values["id"].';');
+
+				for($j=0 ; $j<mysqli_num_rows($markResult) ; $j++) {
+					$markRow = mysqli_fetch_assoc($markResult);
+					$sum += $markRow["score"];
+				}
+				if(mysqli_num_rows($markResult) != 0) {
+					$average = $sum / mysqli_num_rows($markResult);
+				}
+				else {
+					$average = -1;
+				}
+
+				$averages[] = $average;
+				$lines[] = $values;
+			}
+
+			arsort($averages, SORT_NUMERIC);
+
+			if(! empty($averages)) {
+				foreach ($averages as $key => $value) {
+					$tableResult .= postInfos($linkDB, $lines[$key]);
+				}
+			}
 		}
 
 		return $tableResult;
@@ -382,13 +439,25 @@
 		$pageNumberResult = mysqli_query($linkDB, 'SELECT * FROM `post`;');
 		$pageNumber = floor(mysqli_num_rows($pageNumberResult)/20) + 1;
 
+		if(! strpos($url, '?') !== false) {
+			$url .= '?page=';
+		}
+		else if(isset($_GET["page"])) {
+			$url = explode('&page=', $url)[0].'&amp;page=';
+		}
+		else {
+			$url .= '&amp;page=';
+		}
+
+		$url = str_replace('&', '&amp;', $url);
+
 		echo '<div id="pageNumbers">';
 
 		if($page-2 > 1) {
-			$result .= '<a href="index.php?page=1" class="pageNumber">1</a>';
+			$result .= '<a href="'.$url.'1" class="pageNumber">1</a>';
 			if($page-3 > 1) {
 				if($page-3 == 2) {
-					$result .= '<a href="index.php?page=2" class="pageNumber">2</a>';
+					$result .= '<a href="'.$url.'2" class="pageNumber">2</a>';
 				}
 				else {
 					$result .= '<span class="pageNumber">...</span>';
@@ -400,10 +469,10 @@
 		for($i=$page-2 ; $i<=$page+2 ; $i++) {
 			if(($i > 0) && ($i <= $pageNumber)) {
 				if($i == $page) {
-					$result .= '<a href="index.php?page='.$i.'" class="pageNumber actualPage">'.$i.'</a>';
+					$result .= '<a href="'.$url.$i.'" class="pageNumber actualPage">'.$i.'</a>';
 				}
 				else {
-					$result .= '<a href="index.php?page='.$i.'" class="pageNumber">'.$i.'</a>';
+					$result .= '<a href="'.$url.$i.'" class="pageNumber">'.$i.'</a>';
 				}
 			}
 		}
@@ -411,13 +480,13 @@
 		if($page+2 < $pageNumber) {
 			if($page+3 < $pageNumber) {
 				if($page+3 == $pageNumber-1) {
-					$result .= '<a href="index.php?page='.($pageNumber-1).'" class="pageNumber">'.($pageNumber-1).'</a>';
+					$result .= '<a href="'.$url.($pageNumber-1).'" class="pageNumber">'.($pageNumber-1).'</a>';
 				}
 				else {
 					$result .= '<span class="pageNumber">...</span>';
 				}
 			}
-			$result .= '<a href="index.php?page='.$pageNumber.'" class="pageNumber">'.$pageNumber.'</a>';
+			$result .= '<a href="'.$url.$pageNumber.'" class="pageNumber">'.$pageNumber.'</a>';
 		}
 
 		echo '</div>';

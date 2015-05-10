@@ -241,7 +241,7 @@ div.titles {
 }
 
 #content{
-	margin-top: 40px;
+	margin-top: 50px;
 }
 
 li.leftAlign:hover > a, li.rightAlign:hover > a {
@@ -282,20 +282,6 @@ li.logoutLink > a {
 div#postDiv {
 	margin-top: 60px;
 }
-
-/* I DON'T KNOW WHAT THIS IS
-div.login{
-	border-radius: 6px;
-	background-color: #233140;
-	width:300px;
-	height: 100px;
-	display: block;
-	float: left;
-	position: relative;
-	border:solid;
-	border-color:#2c3e50;
-}
-*/
 
 /* Used in the login form to align the "Login" button */
 div.leftForm {
@@ -416,37 +402,34 @@ p#username {
 	color: #c0392b;
 }
 
-input#valider {
-	border:none;
-	background-color: #233140;
+/* Form on the top of the index.php page */
+form.selecter {
+	/*border:solid #11181f;*/
+	display: inline;
 }
 
-input#valider:hover {
+select#category, select#order {
+	border:solid #11181f;
+	overflow: hidden;
+	background: transparent;
+	color: #7f8c8d;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+input#filter {
+	color:#7f8c8d;
+	width: 100px;
+	background-color: #233140;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+input#filter:hover {
 	background-color: #11181f;
 }
 
-select {
-	width: 100px;
-	background: transparent;
-	border: none;
-	color: #7f8c8d;
-}
-
-.selecter {
-	width:100px;
-	overflow:hidden;
-}
-
-form.selecter {
-	border:solid #11181f;
-}
-
-input#valider {
-	text-align: left;
-	width: 100px;
-	color:#7f8c8d
-}
-
+/* Page numbers at bottom */
 div#pageNumbers {
 	margin-top: 20px;
 }

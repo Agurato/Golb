@@ -60,6 +60,20 @@
 			fclose($handle);
 		}
 
+		// We open the file
+		if(($handle = fopen("../users/impossible.csv", "r")) !== false) {
+			while(($data = fgetcsv($handle, 1000, ":")) !== false) {
+				if(count($data) == 1) {
+					// If the username is already used
+					if(strtolower($data[0]) == strtolower($_POST["usernameSignup"])) {
+						$register = false;
+						$error .= "1";
+					}
+				}
+			}
+			fclose($handle);
+		}
+
 		// If we are allowed to register
 		if($register) {
 			// We create the array containing the new user's infos (username, password, e-mail, user access, signature)
@@ -70,16 +84,7 @@
 			fputcsv($file, $newUser, ":");
 			fclose($file);
 
-			// We create his own directory for his profile page
-			// $userDir = "../users/".strtolower($_POST["usernameSignup"]);
-			// mkdir($userDir);
-
-			// $file = fopen($userDir."/.userAccount.csv", "w");
-			// fputcsv($file, $newUser, ":");
-			// fclose($file);
-
-			// copy("../users/usersIndex.php", $userDir."/index.php");
-			// copy("../img/user.png", $userDir."/profilePic.png");
+			fputcsv(fopen("../users/impossible.csv", "a"), $_POST["usernameSignup"], ":");
 
 			// Redirection
 			if(isset($_GET["page"])) {
