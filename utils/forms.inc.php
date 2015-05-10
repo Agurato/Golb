@@ -520,9 +520,11 @@
 				<?php
 				echo '<form enctype="multipart/form-data" action="user.php?name='.$name.'" method="post">';
 				?>
+				<p class="generalForm">
 					<input type="hidden" name="MAX_FILE_SIZE" value="30000000" />
 			  		Uploadez votre image : <input name="userfile" type="file" />
 			  		<input type="submit" value="Envoyer le fichier" />
+			  	</p>
 				</form>
 				<?php
 				echo '<form method="post" action="user.php?name='.$name.'">';
