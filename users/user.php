@@ -42,6 +42,51 @@
 			retrievePasswordForm("../utils/retrievePassword.php");
 
 			pictureChange($_GET["name"]);
+
+			if(!empty($_POST["email"])){
+				
+				$change = true;
+				$error = "";
+
+				$lineCounter = 0;
+				$lineToEdit = 0;
+				// We open the accounts file
+				if(($handle = fopen("../users/accounts.csv", "r")) !== false) {
+					while(($data = fgetcsv($handle, 1000, ":")) !== false) {
+						if(count($data) == 5) {
+							// We check each line to find the one with the good username
+							if(strtolower($data[0]) == strtolower($_SESSION["login"])) {
+								// We get the line number in the file
+								$lineToEdit = $lineCounter;
+							}
+						}
+						$lineCounter ++;
+					}
+					fclose($handle);
+				}
+
+				// If no error happened for the moment
+				if($change) {
+					// We re-open the file
+					if(($fileLines = file("../users/accounts.csv")) !== false) {
+						// We get the array containing all the infos about the current user
+						$userInfos = explode(":", $fileLines[$lineToEdit]);
+
+						if(count($userInfos) == 5) {
+							// We change the email
+							$userInfos[2] = $_POST["email"];
+							// We change the array containing all the users
+							$fileLines[$lineToEdit] = implode(":", $userInfos);
+							// We re-write in the file
+							file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
+
+							echo '<meta http-equiv="refresh" content="0;URL='.$_SERVER['REQUEST_URI'].'"> ';
+							
+						}
+					}
+				}
+			}
+
 		?>
 
 		<!-- Title & subtitle -->
@@ -78,27 +123,31 @@
 			<?php
 				
 				if(!empty($_FILES)){
-					move_uploaded_file($_FILES['userfile']['tmp_name'], getcwd().'/'.$_FILES['userfile']['name']);
-					if(file_exists($_GET["name"].'profil.png')){
-						unlink($_GET["name"].'profil.png');
+					move_uploaded_file($_FILES['userfile']['tmp_name'], getcwd().'/pics/'.$_FILES['userfile']['name']);
+					if(file_exists('pics/'.$_GET["name"].'profil.png')){
+						unlink('pics/'.$_GET["name"].'profil.png');
 					}
-					rename($_FILES['userfile']['name'],$_GET["name"].'profil.png');
+					rename('pics/'.$_FILES['userfile']['name'],$_GET["name"].'profil.png');
 				}
 
 				
-				if(file_exists($_GET["name"].'profil.png')){
-					echo '<p id="username">'.$currentUser[0].'<img src="'.$_GET["name"].'profil.png" width="100" alt="profilePic" height="100"/></p>';
+				if(file_exists('pics/'.($_GET["name"].'profil.png'))){
+					echo '<p id="username">'.$currentUser[0].'<img src="pics/'.$_GET["name"].'profil.png" width="100" alt="profilePic" height="100"/></p>';
 				}
 				else{
-					echo '<p id="username">'.$currentUser[0].'<img src="default.png" width="100" alt="profilePic" height="100"/></p>';
+					echo '<p id="username">'.$currentUser[0].'<img src="pics/default.png" width="100" alt="profilePic" height="100"/></p>';
 
 				}
 				echo '<form method="post" action="user.php?name='.$_GET["name"].'#pictureChange">'
 
 			?>
-				<input type="submit" value="Changer votre photo de profil" name="changePicture" id="changePicture" />
+				<p class="profileForm">
+					<input type="submit" value="Changer votre photo de profil" name="changePicture" id="changePicture" />
+				</p>
 			</form>	
-			<form method="post" action="profileChange.php">
+			<?php
+			echo '<form method="post" action="user.php?name='.$_GET["name"].'">';
+			?>
 				<p class="profileForm">
 					<label for="email">Adresse e-mail</label><br />
 					<input type="text" name="email" id="email" 
@@ -110,7 +159,12 @@
 						}
 					?>
 					/>
+					<input type="submit" name="emailChange" id="emailChange" value="Changer mon adresse e-mail"/>
 				</p>
+			</form>
+			<!--<?php
+			echo '<form method="post" action="user.php?name="'.$_GET["name"].'">';
+			?>
 				<p class="profileForm">
 					<label for="signature">Signature (512 charactères max)</label><br />
 					<textarea rows="5" cols="50" name="signature" id="signature" ><?php
@@ -122,7 +176,7 @@
 				</p>
 
 			</form>
-
+			-->
 			<?php
 				if(!empty($_SESSION['login'])) {
 					if(strtolower($_SESSION['login']) == strtolower($currentUser[0])) {

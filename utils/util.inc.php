@@ -195,11 +195,11 @@
 
 		$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$postRow["author"].'</span><br />';
 		$tableResult .= '<span class="postDate">'.$postRow["date"].'</span><br />';
-		if(file_exists('users/'.strtolower($postRow["author"]).'profil.png')){
-			$tableResult .= '<img src="users/'.strtolower($postRow['author']).'profil.png" alt="user" height="40" class="userPic" />';
+		if(file_exists('users/pics/'.strtolower($postRow["author"]).'profil.png')){
+			$tableResult .= '<img src="users/pics/'.strtolower($postRow['author']).'profil.png" alt="user" height="40" class="userPic" />';
 		}
 		else{
-			$tableResult .= '<img src="users/default.png" alt="user" height="40" class="userPic" />';
+			$tableResult .= '<img src="users/pics/default.png" alt="user" height="40" class="userPic" />';
 
 		}
 		$tableResult .= '</td></tr>'."\n";
@@ -414,11 +414,11 @@
 			$tableResult .= '<table class="postComment">';
 
 			$tableResult .= '<tr class="postComment"><td class="commentAuthor" rowspan="3">';
-			if(file_exists('users/'.strtolower($comment["author"]).'profil.png')){
-				$tableResult .= '<img src="users/'.strtolower($comment['author']).'profil.png" alt="user" height="40" class="userPic" />';
+			if(file_exists('users/pics/'.strtolower($comment["author"]).'profil.png')){
+				$tableResult .= '<img src="users/pics/'.strtolower($comment['author']).'profil.png" alt="user" height="40" class="userPic" />';
 			}
 			else{
-				$tableResult .= '<img src="users/default.png" alt="user" height="40" class="userPic" />';
+				$tableResult .= '<img src="users/pics/default.png" alt="user" height="40" class="userPic" />';
 			}
 			$tableResult .= '<span class="commentAuthorName">'.$comment["author"].'</span>';
 			$tableResult .= '<br /><span class="commentDate">'.$comment["date"].'</span></td></tr>';
