@@ -194,7 +194,15 @@
 		$tableResult .= '<table class="post">'."\n";
 
 		$tableResult .= '<tr class="postInfos"><td class="postAuthor" rowspan="6"><span class="postAuthorName">'.$postRow["author"].'</span><br />';
-		$tableResult .= '<span class="postDate">'.$postRow["date"].'</span><br /><img src="img/user.png" alt="user" height="80" /></td></tr>'."\n";
+		$tableResult .= '<span class="postDate">'.$postRow["date"].'</span><br />';
+		if(file_exists('users/'.strtolower($postRow["author"]).'profil.png')){
+			$tableResult .= '<img src="users/'.strtolower($postRow['author']).'profil.png" alt="user" height="40" class="userPic" />';
+		}
+		else{
+			$tableResult .= '<img src="users/default.png" alt="user" height="40" class="userPic" />';
+
+		}
+		$tableResult .= '</td></tr>'."\n";
 
 		if(! empty($_SESSION["login"]) && ! empty($_SESSION["userLevel"])) {
 			if((strtolower($postRow["author"]) == strtolower($_SESSION["login"])) || $_SESSION["userLevel"] == 3 ) {

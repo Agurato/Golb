@@ -513,4 +513,25 @@
 		</div>
 	<?php
 	}
+	function pictureChange($name){
+		?>
+		<div id="pictureChange" class="modalDialog">
+			<div>
+				<?php
+				echo '<form enctype="multipart/form-data" action="user.php?name='.$name.'" method="post">';
+				?>
+					<input type="hidden" name="MAX_FILE_SIZE" value="30000000" />
+			  		Uploadez votre image : <input name="userfile" type="file" />
+			  		<input type="submit" value="Envoyer le fichier" />
+				</form>
+				<?php
+				echo '<form method="post" action="user.php?name='.$name.'">';
+				?>	<p class="generalForm">
+						<input type="submit" value="Retour"/>
+					</p>
+				</form>
+			</div>
+		</div>
+		<?php
+	}
 ?>

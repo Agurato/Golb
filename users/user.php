@@ -40,6 +40,8 @@
 			deleteAccountForm("../utils/deleteAccount.php");
 			// The form to retrieve the password
 			retrievePasswordForm("../utils/retrievePassword.php");
+
+			pictureChange($_GET["name"]);
 		?>
 
 		<!-- Title & subtitle -->
@@ -75,8 +77,27 @@
 		<div id="content">
 			<?php
 				
-				echo '<p id="username">'.$currentUser[0].'<img src="profilePic.png" alt="profilePic" height="100"/></p>';
+				if(!empty($_FILES)){
+					move_uploaded_file($_FILES['userfile']['tmp_name'], getcwd().'/'.$_FILES['userfile']['name']);
+					if(file_exists($_GET["name"].'profil.png')){
+						unlink($_GET["name"].'profil.png');
+					}
+					rename($_FILES['userfile']['name'],$_GET["name"].'profil.png');
+				}
+
+				
+				if(file_exists($_GET["name"].'profil.png')){
+					echo '<p id="username">'.$currentUser[0].'<img src="'.$_GET["name"].'profil.png" width="100" alt="profilePic" height="100"/></p>';
+				}
+				else{
+					echo '<p id="username">'.$currentUser[0].'<img src="default.png" width="100" alt="profilePic" height="100"/></p>';
+
+				}
+				echo '<form method="post" action="user.php?name='.$_GET["name"].'#pictureChange">'
+
 			?>
+				<input type="submit" value="Changer votre photo de profil" name="changePicture" id="changePicture" />
+			</form>	
 			<form method="post" action="profileChange.php">
 				<p class="profileForm">
 					<label for="email">Adresse e-mail</label><br />

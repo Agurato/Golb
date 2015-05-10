@@ -11,7 +11,7 @@
 	<div id="header">
 		<!-- Login dialog box -->
 		<?php
-			$linkDB = initDB();
+			$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
 			loginForm();
 			registerForm();
 			newPostForm($linkDB);
