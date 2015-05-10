@@ -92,16 +92,16 @@
 				// We re-write the "accounts.csv" file
 				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
 				// Redirection
-				// header('Location: ../admin.php');
+				header('Location: ../admin.php');
 			}
 		}
 
 		// If there's an error
 		if($error != "") {
-			// header('Location: ../admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
+			header('Location: ../admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
 		}
 
-		// header('Location: ../admin.php');
+		header('Location: ../admin.php');
 	}
 
 	endHTML();

@@ -84,7 +84,8 @@
 			fputcsv($file, $newUser, ":");
 			fclose($file);
 
-			fputcsv(fopen("../users/impossible.csv", "a"), $_POST["usernameSignup"], ":");
+
+			fputcsv(fopen("../users/impossible.csv", "a"), array($_POST["usernameSignup"]), ":");
 
 			// Redirection
 			if(isset($_GET["page"])) {
