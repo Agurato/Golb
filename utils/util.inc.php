@@ -356,7 +356,13 @@
 
 			$tableResult .= '<table class="postComment">';
 
-			$tableResult .= '<tr class="postComment"><td class="commentAuthor" rowspan="3"><img src="img/user.png" alt="user" height="40" class="userPic" />';
+			$tableResult .= '<tr class="postComment"><td class="commentAuthor" rowspan="3">';
+			if(file_exists('users/'.strtolower($comment["author"]).'profil.png')){
+				$tableResult .= '<img src="users/'.strtolower($comment['author']).'profil.png" alt="user" height="40" class="userPic" />';
+			}
+			else{
+				$tableResult .= '<img src="users/default.png" alt="user" height="40" class="userPic" />';
+			}
 			$tableResult .= '<span class="commentAuthorName">'.$comment["author"].'</span>';
 			$tableResult .= '<br /><span class="commentDate">'.$comment["date"].'</span></td></tr>';
 			$tableResult .= '<tr class="postComment"><th class="commentID">#'.$postID.'.'.$comment["commentID"].'</th><th><a href="#header">'.$post["title"].'</a></th></tr>';
