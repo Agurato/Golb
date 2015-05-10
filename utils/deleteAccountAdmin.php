@@ -53,6 +53,38 @@
 		// If no errors happened
 		if($delete) {
 			if(($fileLines = file("../users/accounts.csv")) !== false) {
+
+				// If the option to delete all posts is selected
+				if($_POST["deleteOption"] == "deleteAll") {
+					$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
+					// We delete the marks the user gave
+					$deleteQuery = 'DELETE FROM `mark` WHERE `author` = "'.$_GET["account"].'";';
+					echo $deleteQuery.'<br />';
+					mysqli_query($linkDB, $deleteQuery);
+
+					// We delete the comments he wrote
+					$deleteQuery = 'DELETE FROM `comment` WHERE `author` = "'.$_GET["account"].'";';
+					echo $deleteQuery.'<br />';
+					mysqli_query($linkDB, $deleteQuery);
+
+					// We delete the marks of the posts he wrote
+					$deleteQuery = 'DELETE FROM `mark` WHERE `postID` IN (SELECT `id` FROM `post` WHERE `author` = "'.$_GET["account"].'");';
+					echo $deleteQuery.'<br />';
+					mysqli_query($linkDB, $deleteQuery);
+
+					// We delete the comments of the posts he wrote
+					$deleteQuery = 'DELETE FROM `comment` WHERE `postID` IN (SELECT `id` FROM `post` WHERE `author` = "'.$_GET["account"].'");';
+					echo $deleteQuery.'<br />';
+					mysqli_query($linkDB, $deleteQuery);
+
+					// We delete the posts he wrote
+					$deleteQuery = 'DELETE FROM `post` WHERE `author` = "'.$_GET["account"].'";';
+					echo $deleteQuery.'<br />';
+					mysqli_query($linkDB, $deleteQuery);
+
+					mysqli_close($linkDB);
+				}
+
 				// We delete the line corresponding to the account and reassemble all the lines of the file
 				unset($fileLines[$lineToEdit]);
 				$fileLines = array_values($fileLines);
@@ -60,16 +92,16 @@
 				// We re-write the "accounts.csv" file
 				file_put_contents("../users/accounts.csv", $fileLines, LOCK_EX);
 				// Redirection
-				header('Location: ../admin.php');
+				// header('Location: ../admin.php');
 			}
 		}
 
 		// If there's an error
 		if($error != "") {
-			header('Location: ../admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
+			// header('Location: ../admin.php?account='.$_GET["account"].'&error='.$error.'#delAccountModal');
 		}
 
-		header('Location: ../admin.php');
+		// header('Location: ../admin.php');
 	}
 
 	endHTML();

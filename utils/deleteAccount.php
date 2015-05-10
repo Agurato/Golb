@@ -30,6 +30,34 @@
 
 		if($delete) {
 			if(($fileLines = file("../users/accounts.csv")) !== false) {
+				if(isset($_POST["deleteOption"])) {
+					// If the option to delete all posts is selected
+					if($_POST["deleteOption"] == "deleteAll") {
+						$linkDB = mysqli_connect(SERVER_NAME, USER_NAME, USER_PASS, DB_NAME);
+						// We delete the marks the user gave
+						$deleteQuery = 'DELETE FROM `mark` WHERE `author` = "'.$_SESSION["login"].'";';
+						mysqli_query($linkDB, $deleteQuery);
+
+						// We delete the comments he wrote
+						$deleteQuery = 'DELETE FROM `comment` WHERE `author` = "'.$_SESSION["login"].'";';
+						mysqli_query($linkDB, $deleteQuery);
+
+						// We delete the marks of the posts he wrote
+						$deleteQuery = 'DELETE FROM `mark` WHERE `postID` IN (SELECT `id` FROM `post` WHERE `author` = "'.$_SESSION["login"].'");';
+						mysqli_query($linkDB, $deleteQuery);
+
+						// We delete the comments of the posts he wrote
+						$deleteQuery = 'DELETE FROM `comment` WHERE `postID` IN (SELECT `id` FROM `post` WHERE `author` = "'.$_SESSION["login"].'");';
+						mysqli_query($linkDB, $deleteQuery);
+
+						// We delete the posts he wrote
+						$deleteQuery = 'DELETE FROM `post` WHERE `author` = "'.$_SESSION["login"].'";';
+						mysqli_query($linkDB, $deleteQuery);
+
+						mysqli_close($linkDB);
+					}
+				}
+
 				// We delete the corresponding line & re-assemble the array of lines
 				unset($fileLines[$lineToEdit]);
 				$fileLines = array_values($fileLines);
