@@ -426,14 +426,14 @@ input#valider:hover {
 }
 
 select {
-	width:100px;
+	width: 100px;
 	background: transparent;
-	border:none;
-	color:#7f8c8d;
+	border: none;
+	color: #7f8c8d;
 }
 
 .selecter {
-	width:80px;
+	width:100px;
 	overflow:hidden;
 }
 
@@ -443,7 +443,12 @@ form.selecter {
 
 input#valider {
 	text-align: left;
+	width: 100px;
 	color:#7f8c8d
+}
+
+div#pageNumbers {
+	margin-top: 20px;
 }
 
 .pageNumber {

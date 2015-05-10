@@ -293,15 +293,29 @@
 		return $tableResult;
 	}
 
-	function getPosts($linkDB, $beginning, $order, $direction) {
+	function getPosts($linkDB, $beginning, $filter, $order, $direction) {
 		$tableResult = '';
 
+		$query = 'SELECT * FROM `post`';
+
+		$checkFilter = array();
+		$checkFilterResult = mysqli_query($linkDB, 'SELECT `name` FROM `category`');
+		for($i=0 ; $i<mysqli_num_rows($checkFilterResult) ; $i++) {
+			$checkFilter[] = mysqli_fetch_assoc($checkFilterResult)['name'];
+		}
+
+		if(in_array($filter, $checkFilter)) {
+			$query .= ' WHERE `id` IN (SELECT `postID` FROM `is_used` WHERE `categoryName` = "'.$filter.'")';
+		}
+
 		if(($direction == 'ASC' || $direction == 'DESC') && in_array($order, array('id', 'date'))) {
-			$query = 'SELECT * FROM `post` ORDER BY `'.$order.'` '.$direction.' LIMIT '.$beginning.', 20;';
+			$query .= ' ORDER BY `'.$order.'` '.$direction;
 		}
 		else {
-			$query = 'SELECT * FROM `post` ORDER BY `id` ASC LIMIT '.$beginning.', 20;';
+			$query .= ' ORDER BY `id` ASC';
 		}
+		$query .= ' LIMIT '.$beginning.', 20;';
+
 		$result = mysqli_query($linkDB, $query);
 
 		for($i=0 ; $i<mysqli_num_rows($result) ; $i++) {
@@ -348,7 +362,7 @@
 		return $tableResult;
 	}
 
-	function accessPages($linkDB, $page) {
+	function accessPages($linkDB, $url, $page) {
 		$result = '';
 
 		$pageNumberResult = mysqli_query($linkDB, 'SELECT * FROM `post`;');

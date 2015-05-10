@@ -49,14 +49,21 @@
 			</ul>
 		</div>
 		<div id="content">
-			<form method="post" action="index.php" class="selecter">
+			<form method="get" action="index.php" class="selecter">
 					<div class="selecter">
-						<select name="Selectioner une rubrique" id="rubrique">
+						<select name="category" id="rubrique">
 							<option value="Rubrique">Rubrique</option>
-							<option value="XHTML">XHTML</option>
-							<option value="CSS">CSS</option>
-							<option value="PHP">PHP</option>
-							<option value="MySQL">MySQL</option>
+							<?php
+								$options = mysqli_query($linkDB, 'SELECT * FROM `category`');
+								for($i=0 ; $i<mysqli_num_rows($options) ; $i++) {
+									$row = mysqli_fetch_assoc($options);
+									echo '<option value="'.$row["name"].'"';
+									if(! empty($_GET["category"]) && $_GET["category"] == $row["name"]) {
+										echo 'selected="selected" ';
+									}
+									echo '>'.$row["name"].'</option>';
+								}
+							?>
 						</select>
 					</div>
 					<div>
@@ -88,9 +95,14 @@
 					}
 				}
 				
-				echo getPosts($linkDB, ($page-1)*20, 'date', 'DESC');
+				if(! empty($_GET["category"])) {
+					echo getPosts($linkDB, ($page-1)*20, $_GET["category"], 'date', 'DESC');
+				}
+				else {
+					echo getPosts($linkDB, ($page-1)*20, '', 'date', 'DESC');
+				}
 
-				echo accessPages($linkDB, $page);
+				echo accessPages($linkDB, '', $page);
 
 				mysqli_close($linkDB);
 			?>
